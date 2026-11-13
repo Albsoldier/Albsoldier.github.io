@@ -134,6 +134,7 @@
   .stat b { display: block; font-size: 24px; letter-spacing: -0.02em; }
   .stat > span { color: var(--muted); font-size: 13px; }
   .stat b { font-variant-numeric: tabular-nums; }
+  .stat .plus { color: var(--accent); }
 
   .in { opacity: 0; transform: translateY(16px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
   .in.d1 { animation-delay: .08s } .in.d2 { animation-delay: .16s } .in.d3 { animation-delay: .24s } .in.d4 { animation-delay: .32s }
@@ -571,7 +572,7 @@
       <div class="stats in d4">
         <div class="stat"><b><span class="count" id="projCount" data-to="2">0</span></b><span>Live websites</span></div>
         <div class="stat"><b><span class="count" id="techCount" data-to="10">0</span>+</b><span>Technologies used</span></div>
-        <div class="stat"><b><span class="count" data-to="100">0</span>%</b><span>Hand-coded</span></div>
+        <div class="stat"><b>Code <span class="plus">+</span> AI</b><span>Hand-coded + AI tools</span></div>
       </div>
     </div>
   </div>
