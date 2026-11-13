@@ -7,7 +7,7 @@
 <meta name="description" content="Portfolio of Albsoldier, a web developer building fast, friendly websites.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   /* ====== EDIT ME: colors ====== */
   :root {
@@ -17,123 +17,272 @@
     --muted: #6b6762;
     --border: #e7e3dd;
     --accent: #c2410c;
+    --accent-2: #ea7a3b;
     --accent-soft: #fdeee6;
+    --folder: #e8913f;
+    --folder-dark: #cf7425;
+    --paper: #ffffff;
+    --shadow: 0 1px 2px rgba(28,27,26,.06), 0 8px 24px rgba(28,27,26,.08);
+    --overlay: rgba(20,19,18,.55);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #141312;
-      --surface: #1d1c1a;
-      --text: #f2efea;
-      --muted: #a39e97;
-      --border: #2f2d2a;
-      --accent: #fb923c;
-      --accent-soft: #3a2416;
+      --bg: #141312; --surface: #1d1c1a; --text: #f2efea; --muted: #a39e97;
+      --border: #2f2d2a; --accent: #fb923c; --accent-2: #fdba74; --accent-soft: #3a2416;
+      --folder: #d9822f; --folder-dark: #b5661d; --paper: #2a2826;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+      --overlay: rgba(0,0,0,.65);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #141312;
-    --surface: #1d1c1a;
-    --text: #f2efea;
-    --muted: #a39e97;
-    --border: #2f2d2a;
-    --accent: #fb923c;
-    --accent-soft: #3a2416;
+    --bg: #141312; --surface: #1d1c1a; --text: #f2efea; --muted: #a39e97;
+    --border: #2f2d2a; --accent: #fb923c; --accent-2: #fdba74; --accent-soft: #3a2416;
+    --folder: #d9822f; --folder-dark: #b5661d; --paper: #2a2826;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    --overlay: rgba(0,0,0,.65);
   }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font: 16px/1.6 "Inter", system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
+  body.locked { overflow: hidden; }
   a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
   .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  button { font: inherit; }
 
-  /* Nav */
+  /* ---------- Nav ---------- */
   nav {
-    position: sticky; top: 0; z-index: 10;
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
   }
   nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
   .logo { font-weight: 700; color: var(--text); }
   .logo span { color: var(--accent); }
-  nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; align-items: center; }
-  nav ul a { color: var(--muted); font-size: 15px; }
-  nav ul a:hover { color: var(--text); text-decoration: none; }
+  nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; align-items: center; }
+  nav ul a { color: var(--muted); font-size: 15px; transition: color .15s; }
+  nav ul a:hover { color: var(--text); }
   .theme-btn {
     background: none; border: 1px solid var(--border); color: var(--text);
-    border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 16px;
+    border-radius: 10px; width: 36px; height: 36px; cursor: pointer; display: grid; place-items: center;
   }
+  .theme-btn svg { width: 18px; height: 18px; }
 
-  /* Hero */
-  header.hero { padding: 96px 0 72px; }
-  .hero-inner { display: flex; gap: 32px; align-items: center; }
-  .avatar {
-    width: 120px; height: 120px; border-radius: 50%; flex-shrink: 0;
-    border: 3px solid var(--accent-soft); background: var(--accent); color: #fff;
-    display: grid; place-items: center; font-size: 48px; font-weight: 700;
+  /* ---------- Hero ---------- */
+  header.hero { position: relative; padding: 104px 0 88px; overflow: hidden; }
+  .blob {
+    position: absolute; border-radius: 50%; filter: blur(70px); opacity: .45; pointer-events: none;
+    animation: drift 18s ease-in-out infinite alternate;
   }
-  .eyebrow { color: var(--accent); font-size: 14px; font-weight: 500; margin: 0 0 8px; }
-  h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; }
-  .lead { font-size: 18px; color: var(--muted); max-width: 560px; margin: 0 0 28px; }
+  .blob.b1 { width: 420px; height: 420px; background: var(--accent-2); top: -140px; right: -80px; }
+  .blob.b2 { width: 320px; height: 320px; background: var(--accent-soft); bottom: -160px; left: -60px; animation-delay: -6s; opacity: .9; }
+  @keyframes drift { to { transform: translate(-60px, 40px) scale(1.12); } }
+  .hero-inner { position: relative; display: flex; gap: 36px; align-items: center; }
+  .avatar {
+    width: 124px; height: 124px; border-radius: 32px; flex-shrink: 0; transform: rotate(-4deg);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff;
+    display: grid; place-items: center; font-size: 54px; font-weight: 800; box-shadow: var(--shadow);
+  }
+  .eyebrow { color: var(--accent); font-size: 14px; font-weight: 500; margin: 0 0 10px; }
+  h1 { font-size: clamp(34px, 6.2vw, 60px); line-height: 1.05; margin: 0 0 18px; letter-spacing: -0.03em; font-weight: 800; }
+  h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: 18px; color: var(--muted); max-width: 560px; margin: 0 0 30px; }
   .btns { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn {
-    display: inline-block; padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 15px;
-    border: 1px solid var(--border); color: var(--text); background: var(--surface);
+    display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 12px;
+    font-weight: 600; font-size: 15px; border: 1px solid var(--border); color: var(--text);
+    background: var(--surface); cursor: pointer; transition: transform .15s, box-shadow .15s;
   }
   .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .stats { display: flex; gap: 28px; margin-top: 36px; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 24px; letter-spacing: -0.02em; }
+  .stat span { color: var(--muted); font-size: 13px; }
 
-  /* Sections */
-  section { padding: 64px 0; border-top: 1px solid var(--border); }
-  h2 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; }
-  .sub { color: var(--muted); margin: 0 0 32px; }
+  .in { opacity: 0; transform: translateY(16px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+  .in.d1 { animation-delay: .08s } .in.d2 { animation-delay: .16s } .in.d3 { animation-delay: .24s } .in.d4 { animation-delay: .32s }
+  @keyframes rise { to { opacity: 1; transform: none; } }
 
-  /* Featured project */
-  .featured {
-    margin-bottom: 24px;
-    display: grid; grid-template-columns: 1.1fr 1fr; gap: 0;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+  /* ---------- Sections ---------- */
+  section { padding: 80px 0; border-top: 1px solid var(--border); }
+  h2 { font-size: clamp(26px, 4vw, 34px); margin: 0 0 8px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 36px; }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.shown { opacity: 1; transform: none; }
+
+  /* ---------- Folder ---------- */
+  .folder-stage { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 12px 0 8px; }
+  .folder {
+    position: relative; width: min(340px, 82vw); aspect-ratio: 4 / 3; cursor: pointer;
+    background: none; border: 0; padding: 0; perspective: 900px; color: inherit;
+    -webkit-tap-highlight-color: transparent;
   }
-  .featured img { width: 100%; height: 100%; object-fit: cover; min-height: 260px; display: block; }
-  .featured .body { padding: 28px; }
-  .featured h3 { margin: 0 0 8px; font-size: 22px; }
-  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
-  .tag {
-    font-size: 12px; padding: 3px 10px; border-radius: 999px;
-    background: var(--accent-soft); color: var(--accent); font-weight: 500;
+  .folder:focus-visible { outline: 3px solid var(--accent); outline-offset: 10px; border-radius: 18px; }
+  .folder .back {
+    position: absolute; inset: 0; background: var(--folder-dark); border-radius: 6px 18px 18px 18px;
+    box-shadow: var(--shadow);
   }
-  .featured ul { padding-left: 18px; margin: 0 0 20px; color: var(--muted); }
-  .featured li { margin-bottom: 4px; }
+  .folder .back::before { /* tab */
+    content: ""; position: absolute; top: -20px; left: 0; width: 42%; height: 28px;
+    background: var(--folder-dark); border-radius: 14px 14px 0 0;
+  }
+  .folder .paper {
+    position: absolute; left: 9%; right: 9%; top: 10%; bottom: 12%; border-radius: 10px;
+    background: var(--paper) center / cover no-repeat; box-shadow: 0 2px 10px rgba(0,0,0,.18);
+    transition: transform .45s cubic-bezier(.2,.8,.2,1);
+  }
+  .folder .paper.p1 { transform: rotate(-4deg) translateY(4px); }
+  .folder .paper.p2 { transform: rotate(3deg) translateY(10px); left: 13%; right: 5%; }
+  .folder .front {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 74%;
+    background: linear-gradient(180deg, var(--folder), var(--folder-dark));
+    border-radius: 14px 14px 18px 18px; transform-origin: bottom center;
+    transition: transform .5s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 22px; color: #fff; text-align: left;
+    box-shadow: 0 -2px 12px rgba(0,0,0,.12);
+  }
+  .folder .front b { font-size: 24px; letter-spacing: -0.02em; line-height: 1.1; }
+  .folder .front span { font-size: 13px; opacity: .9; }
+  .folder:hover .front, .folder:focus-visible .front { transform: rotateX(-22deg); }
+  .folder:hover .paper.p1 { transform: rotate(-6deg) translateY(-22px); }
+  .folder:hover .paper.p2 { transform: rotate(5deg) translateY(-12px); }
+  .folder.opening .front { transform: rotateX(-72deg); transition-duration: .4s; }
+  .folder.opening .paper.p1 { transform: rotate(-10deg) translateY(-70px) scale(1.04); }
+  .folder.opening .paper.p2 { transform: rotate(8deg) translateY(-56px) scale(1.04); }
+  .hint { color: var(--muted); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .hint i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100% { opacity: .3; transform: scale(.8) } 50% { opacity: 1; transform: scale(1.15) } }
 
+  /* ---------- Work overlay (the opened folder) ---------- */
+  .work-overlay {
+    position: fixed; inset: 0; z-index: 50; background: var(--bg); overflow-y: auto;
+    clip-path: circle(0 at var(--cx, 50%) var(--cy, 50%));
+    visibility: hidden; transition: clip-path .7s cubic-bezier(.7,0,.2,1), visibility 0s .7s;
+  }
+  .work-overlay.open { clip-path: circle(150% at var(--cx, 50%) var(--cy, 50%)); visibility: visible; transition: clip-path .7s cubic-bezier(.7,0,.2,1); }
+  .work-head {
+    position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 14px 0; background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+  }
+  .crumbs { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .crumbs .ficon { width: 26px; height: 20px; background: var(--folder); border-radius: 3px 6px 6px 6px; position: relative; }
+  .crumbs .ficon::before { content: ""; position: absolute; top: -5px; left: 0; width: 45%; height: 7px; background: var(--folder); border-radius: 4px 4px 0 0; }
+  .close-btn {
+    width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); cursor: pointer; display: grid; place-items: center; transition: transform .2s;
+  }
+  .close-btn:hover { transform: rotate(90deg); }
+  .close-btn svg { width: 18px; height: 18px; }
+  .work-body { padding: 40px 0 72px; }
+  .work-body h2 { margin-bottom: 6px; }
+  .proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 24px; }
+  .proj {
+    position: relative; text-align: left; padding: 0; border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); border-radius: 20px; overflow: hidden; cursor: pointer; box-shadow: var(--shadow);
+    opacity: 0; transform: translateY(40px) scale(.96);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .2s, opacity .35s;
+  }
+  .work-overlay.open .proj { animation: cardIn .7s cubic-bezier(.2,.8,.2,1) forwards; }
+  .work-overlay.open .proj:nth-child(1) { animation-delay: .35s } .work-overlay.open .proj:nth-child(2) { animation-delay: .45s }
+  .work-overlay.open .proj:nth-child(3) { animation-delay: .55s } .work-overlay.open .proj:nth-child(4) { animation-delay: .65s }
+  @keyframes cardIn { to { opacity: 1; transform: none; } }
+  .proj.ready { opacity: 1; transform: none; animation: none !important; }
+  .proj.ready:hover { transform: translateY(-6px); border-color: var(--accent); }
+  .proj:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .proj .shot { aspect-ratio: 16 / 9; overflow: hidden; position: relative; background: var(--border); }
+  .proj .shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+  .proj.ready:hover .shot img { transform: scale(1.06); }
+  .proj .badge {
+    position: absolute; top: 14px; left: 14px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: rgba(0,0,0,.55); color: #fff; backdrop-filter: blur(6px);
+  }
+  .proj .info { padding: 20px 22px 22px; }
+  .proj h3 { margin: 0 0 6px; font-size: 20px; letter-spacing: -0.01em; }
+  .proj p { margin: 0 0 14px; color: var(--muted); font-size: 15px; }
+  .proj .open-line { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-weight: 600; font-size: 14px; }
+  .proj .open-line svg { width: 16px; height: 16px; transition: transform .2s; }
+  .proj.ready:hover .open-line svg { transform: translateX(4px); }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+  .tag { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 500; }
 
-  /* Skills */
-  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-  .skill-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .skill-box h3 { margin: 0 0 10px; font-size: 15px; }
+  /* ---------- Project detail ---------- */
+  .detail-backdrop {
+    position: fixed; inset: 0; z-index: 60; background: var(--overlay); opacity: 0; pointer-events: none;
+    transition: opacity .35s;
+  }
+  .detail-backdrop.open { opacity: 1; pointer-events: auto; }
+  .detail {
+    position: fixed; z-index: 61; top: 50%; left: 50%; width: min(880px, calc(100vw - 32px));
+    max-height: calc(100dvh - 48px); overflow-y: auto; transform: translate(-50%, -50%);
+    background: var(--surface); border-radius: 22px; box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    visibility: hidden;
+  }
+  .detail.open { visibility: visible; }
+  .detail .hero-img { position: relative; aspect-ratio: 21 / 9; overflow: hidden; }
+  .detail .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .detail .hero-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.55)); }
+  .detail .hero-img h3 {
+    position: absolute; left: 28px; bottom: 20px; right: 80px; z-index: 1; margin: 0; color: #fff;
+    font-size: clamp(24px, 4vw, 36px); letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .detail .close-btn { position: absolute; top: 14px; right: 14px; z-index: 2; background: rgba(0,0,0,.45); color: #fff; border-color: transparent; }
+  .detail .content { padding: 26px 28px 30px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; }
+  .detail .content > * { opacity: 0; transform: translateY(12px); transition: opacity .4s, transform .4s; }
+  .detail.shown .content > * { opacity: 1; transform: none; }
+  .detail.shown .content > *:nth-child(2) { transition-delay: .08s; }
+  .detail .desc { color: var(--muted); margin: 0 0 18px; }
+  .detail h4 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .detail ul { margin: 0; padding: 0; list-style: none; }
+  .detail li { padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid var(--border); font-size: 15px; }
+  .detail li:last-child { border-bottom: 0; }
+  .detail li::before {
+    content: ""; position: absolute; left: 4px; top: 15px; width: 12px; height: 7px;
+    border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(-45deg);
+  }
+  .detail .side { display: flex; flex-direction: column; gap: 18px; }
+  .detail .side .btn { justify-content: center; }
+
+  /* ---------- Skills / about / contact ---------- */
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .skill-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px; transition: transform .2s, border-color .2s; }
+  .skill-box:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .skill-box .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; margin-bottom: 14px; }
+  .skill-box .ic svg { width: 20px; height: 20px; }
+  .skill-box h3 { margin: 0 0 10px; font-size: 16px; }
   .skill-box ul { list-style: none; margin: 0; padding: 0; color: var(--muted); font-size: 14px; }
   .skill-box li { padding: 3px 0; }
-
-  /* About + contact */
-  .about p { max-width: 640px; color: var(--muted); }
-  .contact { display: flex; gap: 12px; flex-wrap: wrap; }
-
+  .about p { max-width: 660px; color: var(--muted); font-size: 17px; }
+  .contact-card {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border-radius: 24px;
+    padding: 44px 32px; text-align: center;
+  }
+  .contact-card h2 { color: #fff; }
+  .contact-card p { margin: 0 0 24px; opacity: .92; }
+  .contact-card .btns { justify-content: center; }
+  .contact-card .btn { background: #fff; color: var(--accent); border-color: #fff; }
   footer { padding: 32px 0; color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); }
 
   @media (max-width: 720px) {
     nav ul li.hide-sm { display: none; }
-    header.hero { padding: 56px 0 48px; }
-    .hero-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
-    .avatar { width: 88px; height: 88px; }
-    .featured { grid-template-columns: 1fr; }
-    .featured img { min-height: 180px; max-height: 220px; }
+    header.hero { padding: 56px 0 56px; }
+    .hero-inner { flex-direction: column; align-items: flex-start; gap: 22px; }
+    .avatar { width: 84px; height: 84px; font-size: 38px; border-radius: 24px; }
+    .detail .content { grid-template-columns: 1fr; padding: 22px 20px 24px; }
+    .detail .hero-img { aspect-ratio: 16 / 10; }
+    .detail .hero-img h3 { left: 20px; }
+    section { padding: 64px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+    .blob { display: none; }
   }
 </style>
 </head>
@@ -147,21 +296,30 @@
       <li class="hide-sm"><a href="#skills">Skills</a></li>
       <li class="hide-sm"><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">◐</button></li>
+      <li><button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button></li>
     </ul>
   </div>
 </nav>
 
 <!-- ====== EDIT ME: intro ====== -->
 <header class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div>
   <div class="wrap hero-inner">
-    <div class="avatar" aria-hidden="true">A</div>
+    <div class="avatar in" aria-hidden="true">A</div>
     <div>
-      <p class="eyebrow mono">Hi, I'm Albsoldier 👋</p>
-      <h1>I build fast, friendly websites for real businesses.</h1>
-      <p class="lead">Web developer focused on clean front-ends, simple checkouts, and small serverless back-ends that just work.</p>
-      <div class="btns">
-        <a class="btn primary" href="#work">See my work</a>
+      <p class="eyebrow mono in d1">Hi, I'm Albsoldier 👋</p>
+      <h1 class="in d2">I build <em>fast, friendly</em> websites for real businesses.</h1>
+      <p class="lead in d3">Web developer focused on clean front-ends, smooth ordering flows, and back-ends that just work.</p>
+      <div class="btns in d4">
+        <a class="btn primary" href="#work">Open my work</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </div>
+      <div class="stats in d4">
+        <div class="stat"><b id="projCount">2</b><span>Live websites</span></div>
+        <div class="stat"><b>Full-stack</b><span>Front-end to server</span></div>
+        <div class="stat"><b>Real users</b><span>Orders, flights, bookings</span></div>
       </div>
     </div>
   </div>
@@ -170,85 +328,67 @@
 <main>
   <section id="work">
     <div class="wrap">
-      <h2>Projects</h2>
-      <p class="sub">Websites I've designed and built.</p>
-
-      <article class="featured">
-        <img src="images/coffee.jpg" alt="Pillbox Hill Bean Machine coffee shop website">
-        <div class="body">
-          <h3>Pillbox Hill Bean Machine</h3>
-          <p style="margin:0;color:var(--muted)">A coffee shop website where customers browse the menu, customize drinks and place orders, all sent straight to staff on Discord.</p>
-          <div class="tag-row">
-            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Cloudflare Workers</span><span class="tag">Discord API</span>
-          </div>
-          <ul>
-            <li>Menu, cart and drink customization</li>
-            <li>Checkout with order numbers plus pickup or delivery</li>
-            <li>Hiring section with an application form</li>
-            <li>Customer reviews</li>
-            <li>Serverless back-end with origin checks and a spam honeypot</li>
-          </ul>
-          <div class="btns">
-            <a class="btn primary" href="https://albsoldier.github.io/pillboxhillbeanmachine/" target="_blank" rel="noopener">Live site ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="featured">
-        <img src="images/flight.jpg" alt="A business jet flying through a blue sky">
-        <div class="body">
-          <h3>SAAA Flight School Tracker</h3>
-          <p style="margin:0;color:var(--muted)">A web app for the San Andreas Aviation Administration where students, instructors and admins log flights, track progress and book aircraft.</p>
-          <div class="tag-row">
-            <span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">Socket.IO</span><span class="tag">SQLite (Turso)</span><span class="tag">Cloudflare R2</span><span class="tag">Discord OAuth</span>
-          </div>
-          <ul>
-            <li>Sign-in with Discord, plus student, instructor and admin roles</li>
-            <li>Live flight stopwatch and personal flight logs</li>
-            <li>Certificates and student progress tracking</li>
-            <li>Aircraft rentals with request approval and schedules</li>
-            <li>NOTAMs, study material uploads and real-time notifications</li>
-          </ul>
-          <div class="btns">
-            <a class="btn primary" href="https://saaa-flight.fun" target="_blank" rel="noopener">Live site ↗</a>
-          </div>
-        </div>
-      </article>
+      <div class="reveal" style="text-align:center">
+        <h2>My work</h2>
+        <p class="sub">Everything I've built is in this folder. Click it to open.</p>
+      </div>
+      <div class="folder-stage reveal">
+        <button class="folder" id="folderBtn" aria-haspopup="dialog" aria-controls="workOverlay">
+          <span class="back"></span>
+          <span class="paper p2" id="paper2"></span>
+          <span class="paper p1" id="paper1"></span>
+          <span class="front"><b>My Work</b><span id="folderCount"></span></span>
+        </button>
+        <p class="hint"><i></i>Click the folder</p>
+      </div>
     </div>
   </section>
 
   <!-- ====== EDIT ME: skills ====== -->
   <section id="skills">
     <div class="wrap">
-      <h2>Skills</h2>
-      <p class="sub">What I work with.</p>
-      <div class="skills">
-        <div class="skill-box"><h3>Front-end</h3><ul><li>HTML &amp; semantic markup</li><li>CSS, responsive layout</li><li>JavaScript (vanilla)</li></ul></div>
-        <div class="skill-box"><h3>Back-end</h3><ul><li>Node.js &amp; Express</li><li>Cloudflare Workers &amp; R2</li><li>SQLite (Turso)</li><li>Real-time apps with Socket.IO</li><li>Discord OAuth &amp; webhooks</li></ul></div>
-        <div class="skill-box"><h3>Tools</h3><ul><li>Git</li><li>Render &amp; GitHub Pages hosting</li><li>Claude Code</li></ul></div>
+      <div class="reveal">
+        <h2>Skills</h2>
+        <p class="sub">What I work with.</p>
+      </div>
+      <div class="skills reveal">
+        <div class="skill-box">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div>
+          <h3>Front-end</h3><ul><li>HTML &amp; semantic markup</li><li>CSS, responsive layout, animation</li><li>JavaScript (vanilla)</li></ul>
+        </div>
+        <div class="skill-box">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div>
+          <h3>Back-end</h3><ul><li>Node.js &amp; Express</li><li>Cloudflare Workers &amp; R2</li><li>SQLite (Turso)</li><li>Real-time apps with Socket.IO</li><li>Discord OAuth &amp; webhooks</li></ul>
+        </div>
+        <div class="skill-box">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></div>
+          <h3>Tools</h3><ul><li>Git</li><li>Render &amp; GitHub Pages hosting</li><li>Claude Code</li></ul>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ====== EDIT ME: about ====== -->
   <section id="about" class="about">
-    <div class="wrap">
+    <div class="wrap reveal">
       <h2>About me</h2>
       <p>I like building websites that people actually use: places to order a coffee, apply for a job, log a training flight or book an aircraft. I keep things simple, fast and easy to maintain.</p>
       <p>Right now I'm learning more about back-end development and taking on small projects for businesses and communities.</p>
     </div>
   </section>
 
-  <!-- ====== EDIT ME: contact links ====== -->
+  <!-- ====== EDIT ME: contact ====== -->
   <section id="contact">
-    <div class="wrap">
-      <h2>Get in touch</h2>
-      <p class="sub" style="margin-bottom:0">Have a project in mind? I'd love to hear about it.</p>
-      <div class="contact">
-        <!-- Uncomment and fill in to add buttons:
-        <a class="btn primary" href="mailto:you@example.com">Email</a>
-        <a class="btn" href="https://discord.com/users/YOUR_ID">Discord</a>
-        -->
+    <div class="wrap reveal">
+      <div class="contact-card">
+        <h2>Let's build something</h2>
+        <p>Have a project in mind? I'd love to hear about it.</p>
+        <div class="btns">
+          <!-- Uncomment and fill in to add buttons:
+          <a class="btn" href="mailto:you@example.com">Email me</a>
+          <a class="btn" href="https://discord.com/users/YOUR_ID">Discord</a>
+          -->
+        </div>
       </div>
     </div>
   </section>
@@ -258,19 +398,209 @@
   <div class="wrap">© <span id="year"></span> Albsoldier</div>
 </footer>
 
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+<!-- The opened folder -->
+<div class="work-overlay" id="workOverlay" role="dialog" aria-modal="true" aria-labelledby="workTitle" aria-hidden="true">
+  <div class="work-head">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+      <div class="crumbs"><span class="ficon"></span><span>My Work</span></div>
+      <button class="close-btn" id="closeWork" aria-label="Close folder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="wrap work-body">
+    <h2 id="workTitle">Projects</h2>
+    <p class="sub">Websites I've designed and built. Click one to see the details.</p>
+    <div class="proj-grid" id="projGrid"></div>
+  </div>
+</div>
 
-  // Theme toggle (remembers your choice)
+<!-- Project detail -->
+<div class="detail-backdrop" id="detailBackdrop"></div>
+<div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="hero-img">
+    <img id="dImg" alt="">
+    <h3 id="detailTitle"></h3>
+    <button class="close-btn" id="closeDetail" aria-label="Close project">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="content">
+    <div>
+      <p class="desc" id="dDesc"></p>
+      <h4>Features</h4>
+      <ul id="dFeatures"></ul>
+    </div>
+    <div class="side">
+      <div><h4>Built with</h4><div class="tag-row" id="dTags" style="margin:0"></div></div>
+      <div><h4>Type</h4><div id="dType" style="font-size:15px"></div></div>
+      <a class="btn primary" id="dLink" target="_blank" rel="noopener">Visit live site
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ====== EDIT ME: your projects ======
+     Add a new object to this list to add a project. Put its picture in the images folder. */
+  const PROJECTS = [
+    {
+      title: "Pillbox Hill Bean Machine",
+      type: "Coffee shop ordering website",
+      image: "images/coffee.jpg",
+      imageAlt: "Espresso machine and pastries on a café counter",
+      summary: "A coffee shop website where customers browse the menu, customize drinks and place orders, all sent straight to staff on Discord.",
+      tags: ["HTML", "CSS", "JavaScript", "Cloudflare Workers", "Discord API"],
+      features: [
+        "Menu, cart and drink customization",
+        "Checkout with order numbers plus pickup or delivery",
+        "Hiring section with an application form",
+        "Customer reviews",
+        "Serverless back-end with origin checks and a spam honeypot"
+      ],
+      url: "https://albsoldier.github.io/pillboxhillbeanmachine/"
+    },
+    {
+      title: "SAAA Flight School Tracker",
+      type: "Web app for a flight school",
+      image: "images/flight.jpg",
+      imageAlt: "A business jet flying through a blue sky",
+      summary: "A web app for the San Andreas Aviation Administration where students, instructors and admins log flights, track progress and book aircraft.",
+      tags: ["Node.js", "Express", "Socket.IO", "SQLite (Turso)", "Cloudflare R2", "Discord OAuth"],
+      features: [
+        "Sign-in with Discord, plus student, instructor and admin roles",
+        "Live flight stopwatch and personal flight logs",
+        "Certificates and student progress tracking",
+        "Aircraft rentals with request approval and schedules",
+        "NOTAMs, study material uploads and real-time notifications"
+      ],
+      url: "https://saaa-flight.fun"
+    }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  $("year").textContent = new Date().getFullYear();
+  $("projCount").textContent = PROJECTS.length;
+  $("folderCount").textContent = PROJECTS.length + (PROJECTS.length === 1 ? " project" : " projects");
+
+  // Peek the first two project images out of the folder
+  if (PROJECTS[0]) $("paper1").style.backgroundImage = `url("${PROJECTS[0].image}")`;
+  if (PROJECTS[1]) $("paper2").style.backgroundImage = `url("${PROJECTS[1].image}")`;
+
+  // Build project cards
+  const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  $("projGrid").innerHTML = PROJECTS.map((p, i) => `
+    <button class="proj" data-i="${i}">
+      <div class="shot"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}" loading="lazy"><span class="badge">${esc(p.type)}</span></div>
+      <div class="info">
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.summary)}</p>
+        <div class="tag-row">${p.tags.slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+        <span class="open-line">View project ${arrow}</span>
+      </div>
+    </button>`).join("");
+  document.querySelectorAll(".proj").forEach(card => {
+    card.addEventListener("animationend", () => card.classList.add("ready"));
+    card.addEventListener("click", () => openDetail(+card.dataset.i, card));
+  });
+
+  // Theme toggle
   const root = document.documentElement;
   try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch {}
-  document.getElementById("themeBtn").onclick = () => {
-    const dark = root.dataset.theme
-      ? root.dataset.theme === "dark"
-      : matchMedia("(prefers-color-scheme: dark)").matches;
+  $("themeBtn").onclick = () => {
+    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
     root.dataset.theme = dark ? "light" : "dark";
     try { localStorage.setItem("theme", root.dataset.theme); } catch {}
   };
+
+  // Scroll reveal
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("shown"); io.unobserve(e.target); }
+  }), { threshold: .15 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  // ---------- Folder open / close ----------
+  const folder = $("folderBtn"), overlay = $("workOverlay");
+  let lastFocus = null;
+  function openWork() {
+    if (overlay.classList.contains("open")) return;
+    lastFocus = document.activeElement;
+    const r = folder.getBoundingClientRect();
+    overlay.style.setProperty("--cx", (r.left + r.width / 2) + "px");
+    overlay.style.setProperty("--cy", (r.top + r.height / 2) + "px");
+    folder.classList.add("opening");
+    setTimeout(() => {
+      document.querySelectorAll(".proj").forEach(c => c.classList.remove("ready"));
+      overlay.scrollTop = 0;
+      overlay.classList.add("open");
+      overlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("locked");
+      if (location.hash !== "#work-open") history.pushState({ work: true }, "", "#work-open");
+      setTimeout(() => $("closeWork").focus({ preventScroll: true }), reduce ? 0 : 400);
+    }, reduce ? 0 : 380);
+  }
+  function closeWork(fromHistory) {
+    if (!overlay.classList.contains("open")) return;
+    if (detailEl.classList.contains("open")) closeDetail(true);
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("locked");
+    setTimeout(() => folder.classList.remove("opening"), reduce ? 0 : 500);
+    if (!fromHistory && location.hash === "#work-open") history.back();
+    (lastFocus || folder).focus({ preventScroll: true });
+  }
+  folder.addEventListener("click", openWork);
+  $("closeWork").addEventListener("click", () => closeWork());
+  addEventListener("popstate", () => { if (location.hash !== "#work-open") closeWork(true); });
+  if (location.hash === "#work-open") history.replaceState(null, "", "#work");
+
+  // ---------- Project detail (expands from the clicked card) ----------
+  const detailEl = $("detail"), backdrop = $("detailBackdrop");
+  let fromCard = null;
+  function openDetail(i, card) {
+    const p = PROJECTS[i];
+    fromCard = card;
+    $("dImg").src = p.image; $("dImg").alt = p.imageAlt || p.title;
+    $("detailTitle").textContent = p.title;
+    $("dDesc").textContent = p.summary;
+    $("dType").textContent = p.type;
+    $("dFeatures").innerHTML = p.features.map(f => `<li>${esc(f)}</li>`).join("");
+    $("dTags").innerHTML = p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("");
+    $("dLink").href = p.url;
+    detailEl.classList.add("open"); backdrop.classList.add("open");
+    detailEl.scrollTop = 0;
+    animateFromCard(card, false).then(() => { detailEl.classList.add("shown"); $("closeDetail").focus({ preventScroll: true }); });
+  }
+  function closeDetail(instant) {
+    detailEl.classList.remove("shown"); backdrop.classList.remove("open");
+    const done = () => { detailEl.classList.remove("open"); if (fromCard) fromCard.focus({ preventScroll: true }); };
+    if (instant) return done();
+    animateFromCard(fromCard, true).then(done);
+  }
+  // Grow the panel from the card's position (or shrink back into it)
+  function animateFromCard(card, reverse) {
+    if (reduce || !card || !detailEl.animate) return Promise.resolve();
+    const a = card.getBoundingClientRect(), b = detailEl.getBoundingClientRect();
+    const from = {
+      transform: `translate(calc(-50% + ${(a.left + a.width/2) - (b.left + b.width/2)}px), calc(-50% + ${(a.top + a.height/2) - (b.top + b.height/2)}px)) scale(${a.width / b.width}, ${a.height / b.height})`,
+      borderRadius: "40px", opacity: reverse ? 0 : .6
+    };
+    const to = { transform: "translate(-50%, -50%) scale(1)", borderRadius: "22px", opacity: 1 };
+    const anim = detailEl.animate(reverse ? [to, from] : [from, to],
+      { duration: reverse ? 320 : 520, easing: "cubic-bezier(.2,.8,.2,1)" });
+    return anim.finished.catch(() => {});
+  }
+  $("closeDetail").addEventListener("click", () => closeDetail());
+  backdrop.addEventListener("click", () => closeDetail());
+
+  addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    if (detailEl.classList.contains("open")) closeDetail();
+    else closeWork();
+  });
 </script>
 </body>
 </html>
