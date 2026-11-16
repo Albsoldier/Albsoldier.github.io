@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Albsoldier · Web Developer</title>
-<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script>(function(){var d=document.documentElement;try{var th=localStorage.getItem("theme");if(th)d.dataset.theme=th;}catch(e){}
+var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigator.language]).some(function(x){return /^sq\b/i.test(x)})?"sq":"en");}catch(e){}d.lang=lg;})();</script>
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:title" content="Albsoldier · Web Developer">
@@ -499,6 +500,18 @@
   }
 
 
+  /* ================= Language switch ================= */
+  .lang { position: relative; display: inline-flex; align-items: center; height: 36px; padding: 3px; border-radius: 12px;
+    border: 1px solid var(--border); background: none; color: var(--muted); cursor: pointer; font: 600 13px "JetBrains Mono", monospace; }
+  .lang span:not(.lang-pill) { position: relative; z-index: 1; width: 32px; text-align: center; line-height: 28px; transition: color .3s; }
+  .lang-pill { position: absolute; left: 3px; top: 3px; width: 32px; height: 28px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+  :root[lang="sq"] .lang-pill { transform: translateX(32px); }
+  :root[lang="en"] .lang .en, :root[lang="sq"] .lang .sq { color: #fff; }
+  [data-theme="space"][lang="en"] .lang .en, [data-theme="space"][lang="sq"] .lang .sq { color: #150d2e; }
+  .lang:focus-visible, .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 720px) { nav ul { gap: 12px; } }
+
   /* ================= Space mode ================= */
   :root[data-theme="space"] {
     color-scheme: dark;
@@ -616,12 +629,13 @@
     <a href="#" class="logo mono">albsoldier<span>.dev</span></a>
     <ul id="navList">
       <li class="nav-pill" id="navPill" aria-hidden="true"></li>
-      <li class="hide-sm"><a href="#work">Work</a></li>
-      <li class="hide-sm"><a href="#skills">Skills</a></li>
-      <li class="hide-sm"><a href="#process">Process</a></li>
-      <li class="hide-sm"><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><button class="theme-btn" id="themeBtn" aria-label="Switch theme (light, dark, space)" title="Switch theme">
+      <li class="hide-sm"><a href="#work" data-i18n="nav.work">Work</a></li>
+      <li class="hide-sm"><a href="#skills" data-i18n="nav.skills">Skills</a></li>
+      <li class="hide-sm"><a href="#process" data-i18n="nav.process">Process</a></li>
+      <li class="hide-sm"><a href="#about" data-i18n="nav.about">About</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+      <li><button class="lang" id="langBtn" aria-label="Switch language: English / Albanian" data-i18n-aria="a.lang"><span class="lang-pill" aria-hidden="true"></span><span class="en">EN</span><span class="sq">SQ</span></button></li>
+      <li><button class="theme-btn" id="themeBtn" aria-label="Switch theme (light, dark, space)" title="Switch theme" data-i18n-aria="a.theme">
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="i-space" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="10.5" ry="3.5" transform="rotate(-20 12 12)"/></svg>
@@ -638,26 +652,26 @@
     <div class="in"><div class="avatar-wrap">
       <span class="orbit" aria-hidden="true"></span>
       <div class="bubble" id="bubble" role="status" aria-live="polite"></div>
-      <button class="avatar" id="avatar" aria-label="Say hi to the astronaut"><img src="images/avatar.jpg" alt="Albsoldier's profile picture: a cartoon astronaut at a computer" width="168" height="168"></button>
+      <button class="avatar" id="avatar" aria-label="Say hi to the astronaut" data-i18n-aria="a.avatar"><img src="images/avatar.jpg" alt="Albsoldier's profile picture: a cartoon astronaut at a computer" width="168" height="168"></button>
     </div></div>
     <div>
-      <p class="eyebrow mono in d1">Hi, I'm Albsoldier 👋</p>
-      <h1 class="in d2">I build <em class="typer" id="typer">fast</em> websites for real businesses.</h1>
-      <p class="lead in d3">Web developer focused on clean front-ends, smooth ordering flows, and back-ends that just work.</p>
+      <p class="eyebrow mono in d1" data-i18n="hero.hi">Hi, I'm Albsoldier 👋</p>
+      <h1 class="in d2"><span data-i18n="hero.h1a">I build</span> <em class="typer" id="typer">fast</em> <span data-i18n="hero.h1b">websites for real businesses.</span></h1>
+      <p class="lead in d3" data-i18n="hero.lead">Web developer focused on clean front-ends, smooth ordering flows, and back-ends that just work.</p>
       <div class="btns in d4">
-        <a class="btn primary" href="#work">Open my work</a>
-        <a class="btn" href="#contact">Get in touch</a>
+        <a class="btn primary" href="#work" data-i18n="hero.open">Open my work</a>
+        <a class="btn" href="#contact" data-i18n="hero.touch">Get in touch</a>
       </div>
       <div class="stats in d4">
-        <div class="stat"><b><span class="count" id="projCount" data-to="2">0</span></b><span>Live websites</span></div>
-        <div class="stat"><b><span class="count" id="techCount" data-to="10">0</span>+</b><span>Technologies used</span></div>
-        <div class="stat"><b>Code <span class="plus">+</span> AI</b><span>Hand-coded + AI tools</span></div>
+        <div class="stat"><b><span class="count" id="projCount" data-to="2">0</span></b><span data-i18n="stat.live">Live websites</span></div>
+        <div class="stat"><b><span class="count" id="techCount" data-to="10">0</span>+</b><span data-i18n="stat.tech">Technologies used</span></div>
+        <div class="stat"><b data-i18n="stat.code">Code <span class="plus">+</span> AI</b><span data-i18n="stat.codeL">Hand-coded + AI tools</span></div>
       </div>
     </div>
   </div>
 </header>
 
-<div class="marquee" aria-label="Technologies I use">
+<div class="marquee" aria-label="Technologies I use" data-i18n-aria="a.tech">
   <div class="track" id="track1"></div>
   <div class="track rev" id="track2" aria-hidden="true"></div>
 </div>
@@ -666,17 +680,17 @@
   <section id="work">
     <div class="wrap">
       <div class="reveal" style="text-align:center">
-        <h2>My work</h2>
-        <p class="sub">Everything I've built is in this folder. Click it to open.</p>
+        <h2 data-i18n="work.h">My work</h2>
+        <p class="sub" data-i18n="work.sub">Everything I've built is in this folder. Click it to open.</p>
       </div>
       <div class="folder-stage reveal">
         <button class="folder" id="folderBtn" aria-haspopup="dialog" aria-controls="workOverlay">
           <span class="back"></span>
           <span class="paper p2" id="paper2"></span>
           <span class="paper p1" id="paper1"></span>
-          <span class="front"><b>My Work</b><span id="folderCount"></span></span>
+          <span class="front"><b data-i18n="folder">My Work</b><span id="folderCount"></span></span>
         </button>
-        <p class="hint"><i></i>Click the folder</p>
+        <p class="hint"><i></i><span data-i18n="work.hint">Click the folder</span></p>
       </div>
     </div>
   </section>
@@ -685,21 +699,21 @@
   <section id="skills">
     <div class="wrap">
       <div class="reveal">
-        <h2>Skills</h2>
-        <p class="sub">What I work with.</p>
+        <h2 data-i18n="skills.h">Skills</h2>
+        <p class="sub" data-i18n="skills.sub">What I work with.</p>
       </div>
       <div class="skills reveal">
         <div class="skill-box">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div>
-          <h3>Front-end</h3><ul><li>HTML &amp; semantic markup</li><li>CSS, responsive layout, animation</li><li>JavaScript (vanilla)</li></ul>
+          <h3>Front-end</h3><ul><li data-i18n="sk.html">HTML &amp; semantic markup</li><li data-i18n="sk.css">CSS, responsive layout, animation</li><li>JavaScript (vanilla)</li></ul>
         </div>
         <div class="skill-box">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div>
-          <h3>Back-end</h3><ul><li>Node.js &amp; Express</li><li>Cloudflare Workers &amp; R2</li><li>SQLite (Turso)</li><li>Real-time apps with Socket.IO</li><li>Discord OAuth &amp; webhooks</li></ul>
+          <h3>Back-end</h3><ul><li>Node.js &amp; Express</li><li>Cloudflare Workers &amp; R2</li><li>SQLite (Turso)</li><li data-i18n="sk.rt">Real-time apps with Socket.IO</li><li data-i18n="sk.dc">Discord OAuth &amp; webhooks</li></ul>
         </div>
         <div class="skill-box">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></div>
-          <h3>Tools</h3><ul><li>Git</li><li>Render &amp; GitHub Pages hosting</li><li>Claude Code</li></ul>
+          <h3 data-i18n="sk.tools">Tools</h3><ul><li>Git</li><li data-i18n="sk.host">Render &amp; GitHub Pages hosting</li><li>Claude Code</li></ul>
         </div>
       </div>
     </div>
@@ -708,15 +722,15 @@
   <section id="process">
     <div class="wrap">
       <div class="reveal">
-        <h2>How I work</h2>
-        <p class="sub">From first idea to a live website.</p>
+        <h2 data-i18n="proc.h">How I work</h2>
+        <p class="sub" data-i18n="proc.sub">From first idea to a live website.</p>
       </div>
       <div class="steps" id="steps">
         <div class="steps-line"><i id="stepsFill"></i></div>
-        <div class="step"><div class="num">1</div><h3>Plan</h3><p>We talk about what you need, who it's for and what it should do.</p></div>
-        <div class="step"><div class="num">2</div><h3>Design</h3><p>A clean layout that looks good on phones and desktops alike.</p></div>
-        <div class="step"><div class="num">3</div><h3>Build</h3><p>Fast front-end, solid back-end, and tested on real devices.</p></div>
-        <div class="step"><div class="num">4</div><h3>Launch</h3><p>Your site goes live, and I stay around for updates and fixes.</p></div>
+        <div class="step"><div class="num">1</div><h3 data-i18n="p1.h">Plan</h3><p data-i18n="p1.t">We talk about what you need, who it's for and what it should do.</p></div>
+        <div class="step"><div class="num">2</div><h3 data-i18n="p2.h">Design</h3><p data-i18n="p2.t">A clean layout that looks good on phones and desktops alike.</p></div>
+        <div class="step"><div class="num">3</div><h3 data-i18n="p3.h">Build</h3><p data-i18n="p3.t">Fast front-end, solid back-end, and tested on real devices.</p></div>
+        <div class="step"><div class="num">4</div><h3 data-i18n="p4.h">Launch</h3><p data-i18n="p4.t">Your site goes live, and I stay around for updates and fixes.</p></div>
       </div>
     </div>
   </section>
@@ -724,9 +738,9 @@
   <!-- ====== EDIT ME: about ====== -->
   <section id="about" class="about">
     <div class="wrap reveal">
-      <h2>About me</h2>
-      <p>I like building websites that people actually use: places to order a coffee, apply for a job, log a training flight or book an aircraft. I keep things simple, fast and easy to maintain.</p>
-      <p>Right now I'm learning more about back-end development and taking on small projects for businesses and communities.</p>
+      <h2 data-i18n="about.h">About me</h2>
+      <p data-i18n="about.p1">I like building websites that people actually use: places to order a coffee, apply for a job, log a training flight or book an aircraft. I keep things simple, fast and easy to maintain.</p>
+      <p data-i18n="about.p2">Right now I'm learning more about back-end development and taking on small projects for businesses and communities.</p>
     </div>
   </section>
 
@@ -741,18 +755,18 @@
           <svg class="tel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
           <svg class="at" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.9"/></svg>
         </div>
-        <h2>Let's build something</h2>
-        <p>Have a project in mind? Send me an email or give me a call. I'd love to hear about it.</p>
+        <h2 data-i18n="contact.h">Let's build something</h2>
+        <p data-i18n="contact.p">Have a project in mind? Send me an email or give me a call. I'd love to hear about it.</p>
         <div class="contact-grid">
           <div class="contact-item">
             <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
             <span class="txt"><span class="lbl">Email</span><a class="val" href="mailto:jurgen.kapllani@hotmail.com">jurgen.kapllani<wbr>@hotmail.com</a></span>
-            <button class="copy-btn" data-copy="jurgen.kapllani@hotmail.com" aria-label="Copy email address" title="Copy"><svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></button>
+            <button class="copy-btn" data-copy="jurgen.kapllani@hotmail.com" aria-label="Copy email address" title="Copy" data-i18n-aria="a.copyE"><svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></button>
           </div>
           <div class="contact-item">
             <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>
-            <span class="txt"><span class="lbl">Phone</span><a class="val" href="tel:+355695289141">+355 69 528 9141</a></span>
-            <button class="copy-btn" data-copy="+355695289141" aria-label="Copy phone number" title="Copy"><svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></button>
+            <span class="txt"><span class="lbl" data-i18n="contact.phone">Phone</span><a class="val" href="tel:+355695289141">+355 69 528 9141</a></span>
+            <button class="copy-btn" data-copy="+355695289141" aria-label="Copy phone number" title="Copy" data-i18n-aria="a.copyP"><svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></button>
           </div>
         </div>
       </div>
@@ -760,7 +774,7 @@
   </section>
 </main>
 
-<button class="totop" id="totop" aria-label="Back to top">
+<button class="totop" id="totop" aria-label="Back to top" data-i18n-aria="a.top">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg>
 </button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -773,15 +787,15 @@
 <div class="work-overlay" id="workOverlay" role="dialog" aria-modal="true" aria-labelledby="workTitle" aria-hidden="true">
   <div class="work-head">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%">
-      <div class="crumbs"><span class="ficon"></span><span>My Work</span></div>
-      <button class="close-btn" id="closeWork" aria-label="Close folder">
+      <div class="crumbs"><span class="ficon"></span><span data-i18n="folder">My Work</span></div>
+      <button class="close-btn" id="closeWork" aria-label="Close folder" data-i18n-aria="a.closeF">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
   </div>
   <div class="wrap work-body">
-    <h2 id="workTitle">Projects</h2>
-    <p class="sub">Websites I've designed and built. Click one to see the details.</p>
+    <h2 id="workTitle" data-i18n="ov.h">Projects</h2>
+    <p class="sub" data-i18n="ov.sub">Websites I've designed and built. Click one to see the details.</p>
     <div class="proj-grid" id="projGrid"></div>
   </div>
 </div>
@@ -792,20 +806,20 @@
   <div class="hero-img">
     <img id="dImg" alt="">
     <h3 id="detailTitle"></h3>
-    <button class="close-btn" id="closeDetail" aria-label="Close project">
+    <button class="close-btn" id="closeDetail" aria-label="Close project" data-i18n-aria="a.closeP">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </div>
   <div class="content">
     <div>
       <p class="desc" id="dDesc"></p>
-      <h4>Features</h4>
+      <h4 data-i18n="d.feat">Features</h4>
       <ul id="dFeatures"></ul>
     </div>
     <div class="side">
-      <div><h4>Built with</h4><div class="tag-row" id="dTags" style="margin:0"></div></div>
-      <div><h4>Type</h4><div id="dType" style="font-size:15px"></div></div>
-      <a class="btn primary" id="dLink" target="_blank" rel="noopener">Visit live site
+      <div><h4 data-i18n="d.built">Built with</h4><div class="tag-row" id="dTags" style="margin:0"></div></div>
+      <div><h4 data-i18n="d.type">Type</h4><div id="dType" style="font-size:15px"></div></div>
+      <a class="btn primary" id="dLink" target="_blank" rel="noopener"><span data-i18n="d.visit">Visit live site</span>
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </a>
     </div>
@@ -830,7 +844,19 @@
         "Customer reviews",
         "Serverless back-end with origin checks and a spam honeypot"
       ],
-      url: "https://albsoldier.github.io/pillboxhillbeanmachine/"
+      url: "https://albsoldier.github.io/pillboxhillbeanmachine/",
+      sq: {
+        type: "Faqe porosish për një kafene",
+        imageAlt: "Makinë espresso dhe ëmbëlsira në banakun e një kafeneje",
+        summary: "Faqe interneti për një kafene ku klientët shfletojnë menunë, personalizojnë pijet dhe bëjnë porosi, të cilat i shkojnë direkt stafit në Discord.",
+        features: [
+          "Menu, shportë dhe personalizim i pijeve",
+          "Përfundim porosie me numër porosie, me marrje në vend ose dërgesë",
+          "Seksion punësimi me formular aplikimi",
+          "Vlerësime nga klientët",
+          "Back-end serverless me kontroll të origjinës dhe mbrojtje nga spam-i"
+        ]
+      }
     },
     {
       title: "SAAA Flight School Tracker",
@@ -846,7 +872,19 @@
         "Aircraft rentals with request approval and schedules",
         "NOTAMs, study material uploads and real-time notifications"
       ],
-      url: "https://saaa-flight.fun"
+      url: "https://saaa-flight.fun",
+      sq: {
+        type: "Aplikacion web për një shkollë fluturimi",
+        imageAlt: "Një avion biznesi duke fluturuar në qiell blu",
+        summary: "Aplikacion web për San Andreas Aviation Administration ku studentët, instruktorët dhe administratorët regjistrojnë fluturime, ndjekin progresin dhe rezervojnë avionë.",
+        features: [
+          "Hyrje me Discord, me role për studentë, instruktorë dhe administratorë",
+          "Kronometër fluturimi live dhe ditar personal fluturimesh",
+          "Certifikata dhe ndjekje e progresit të studentëve",
+          "Marrje avionësh me qira, me miratim kërkesash dhe orare",
+          "NOTAM-e, ngarkim materialesh studimi dhe njoftime në kohë reale"
+        ]
+      }
     }
   ];
 
@@ -854,10 +892,75 @@
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   $("year").textContent = new Date().getFullYear();
+
+  /* ====== EDIT ME: Albanian translations ======
+     English text lives in the HTML above; these are the Albanian versions of each data-i18n key. */
+  const SQ = {
+    "nav.work": "Punët", "nav.skills": "Aftësitë", "nav.process": "Procesi", "nav.about": "Rreth meje", "nav.contact": "Kontakt",
+    "hero.hi": "Përshëndetje, unë jam Albsoldier 👋",
+    "hero.h1a": "Ndërtoj faqe interneti", "hero.h1b": "për biznese të vërteta.",
+    "hero.lead": "Zhvillues web i fokusuar te ndërfaqe të pastra, porosi online të thjeshta dhe back-end që thjesht funksionon.",
+    "hero.open": "Shiko punët e mia", "hero.touch": "Më kontakto",
+    "stat.live": "Faqe aktive", "stat.tech": "Teknologji të përdorura",
+    "stat.code": 'Kod <span class="plus">+</span> AI', "stat.codeL": "Kod me dorë + mjete AI",
+    "work.h": "Punët e mia", "work.sub": "Gjithçka që kam ndërtuar është në këtë dosje. Kliko për ta hapur.",
+    "folder": "Punët e Mia", "work.hint": "Kliko dosjen",
+    "skills.h": "Aftësitë", "skills.sub": "Me çfarë punoj.",
+    "sk.html": "HTML dhe strukturë semantike", "sk.css": "CSS, dizajn responsive dhe animacione",
+    "sk.rt": "Aplikacione në kohë reale me Socket.IO", "sk.dc": "Discord OAuth dhe webhooks",
+    "sk.tools": "Mjetet", "sk.host": "Hostim në Render dhe GitHub Pages",
+    "proc.h": "Si punoj", "proc.sub": "Nga ideja e parë deri te faqja online.",
+    "p1.h": "Planifikimi", "p1.t": "Flasim për atë që të nevojitet, për kë është dhe çfarë duhet të bëjë.",
+    "p2.h": "Dizajni", "p2.t": "Një strukturë e pastër që duket mirë si në telefon, ashtu edhe në kompjuter.",
+    "p3.h": "Ndërtimi", "p3.t": "Front-end i shpejtë, back-end i qëndrueshëm, i testuar në pajisje reale.",
+    "p4.h": "Publikimi", "p4.t": "Faqja jote del online dhe unë mbetem pranë për përditësime dhe rregullime.",
+    "about.h": "Rreth meje",
+    "about.p1": "Më pëlqen të ndërtoj faqe që njerëzit i përdorin vërtet: vende ku porosit një kafe, aplikon për punë, regjistron një fluturim stërvitor ose rezervon një avion. I mbaj gjërat të thjeshta, të shpejta dhe të lehta për t'u mirëmbajtur.",
+    "about.p2": "Aktualisht po mësoj më shumë për zhvillimin back-end dhe marr përsipër projekte të vogla për biznese dhe komunitete.",
+    "contact.h": "Le të ndërtojmë diçka", "contact.p": "Ke një projekt në mendje? Më dërgo një email ose më telefono. Do të kënaqesha ta dëgjoja.",
+    "contact.phone": "Telefon",
+    "ov.h": "Projektet", "ov.sub": "Faqe që kam dizajnuar dhe ndërtuar. Kliko njërën për të parë detajet.",
+    "d.feat": "Veçoritë", "d.built": "Ndërtuar me", "d.type": "Lloji", "d.visit": "Vizito faqen",
+    "a.theme": "Ndrysho temën (e ndritshme, e errët, hapësirë)", "a.avatar": "Përshëndet astronautin", "a.tech": "Teknologjitë që përdor",
+    "a.top": "Kthehu në krye", "a.closeF": "Mbyll dosjen", "a.closeP": "Mbyll projektin",
+    "a.copyE": "Kopjo adresën e email-it", "a.copyP": "Kopjo numrin e telefonit", "a.lang": "Ndrysho gjuhën: anglisht / shqip"
+  };
+  // Text set from JavaScript
+  const T = {
+    en: {
+      title: "Albsoldier · Web Developer", desc: "Portfolio of Albsoldier, a web developer building fast, friendly websites.",
+      words: ["fast", "friendly", "modern", "real-time", "reliable"],
+      lines: ["Hi there! 👋", "Welcome aboard 🚀", "Need a website?", "Check out my work!", "Coffee first ☕", "Houston, we have a website", "Let's build something!"],
+      projects: n => n + (n === 1 ? " project" : " projects"), view: "View project", copied: "Copied to clipboard ✓",
+      themes: { light: "☀️ Light mode", dark: "🌙 Dark mode", space: "🚀 Space mode, welcome aboard!" }, switched: "🇬🇧 English"
+    },
+    sq: {
+      title: "Albsoldier · Zhvillues Web", desc: "Portofoli i Albsoldier, zhvillues web që ndërton faqe interneti të shpejta dhe miqësore.",
+      words: ["të shpejta", "miqësore", "moderne", "në kohë reale", "të besueshme"],
+      lines: ["Përshëndetje! 👋", "Mirë se erdhe në bord 🚀", "Të duhet një faqe interneti?", "Shiko punët e mia!", "Fillimisht një kafe ☕", "Houston, kemi një faqe interneti", "Le të ndërtojmë diçka!"],
+      projects: n => n + (n === 1 ? " projekt" : " projekte"), view: "Shiko projektin", copied: "U kopjua ✓",
+      themes: { light: "☀️ Tema e ndritshme", dark: "🌙 Tema e errët", space: "🚀 Tema Hapësirë, mirë se erdhe në bord!" }, switched: "🇦🇱 Shqip"
+    }
+  };
+  const L = () => document.documentElement.lang === "sq" ? "sq" : "en";
+  const t = k => T[L()][k];
+  const P = (p, k) => (L() === "sq" && p.sq && p.sq[k]) || p[k];
+  // remember the English versions straight from the page
+  document.querySelectorAll("[data-i18n]").forEach(el => el.dataset.en = el.innerHTML);
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => el.dataset.enAria = el.getAttribute("aria-label"));
+  const langHooks = [];
+  function applyLang() {
+    const sq = L() === "sq";
+    document.querySelectorAll("[data-i18n]").forEach(el => { const v = sq ? SQ[el.dataset.i18n] : el.dataset.en; if (v != null) el.innerHTML = v; });
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => { const v = sq ? SQ[el.dataset.i18nAria] : el.dataset.enAria; if (v != null) el.setAttribute("aria-label", v); });
+    document.title = t("title");
+    document.querySelector('meta[name="description"]').content = t("desc");
+    $("folderCount").textContent = t("projects")(PROJECTS.length);
+    langHooks.forEach(f => f());
+  }
   $("projCount").dataset.to = PROJECTS.length;
   const TECH = [...new Set(PROJECTS.flatMap(p => p.tags).concat(["Git", "Responsive design", "REST APIs", "Webhooks", "Render"]))];
   $("techCount").dataset.to = TECH.length;
-  $("folderCount").textContent = PROJECTS.length + (PROJECTS.length === 1 ? " project" : " projects");
 
   // Peek the first two project images out of the folder
   if (PROJECTS[0]) $("paper1").style.backgroundImage = `url("${PROJECTS[0].image}")`;
@@ -865,26 +968,32 @@
 
   // Build project cards
   const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-  $("projGrid").innerHTML = PROJECTS.map((p, i) => `
-    <button class="proj" data-i="${i}">
-      <div class="shot"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}" loading="lazy"><span class="badge">${esc(p.type)}</span></div>
+  const cardHooks = [];
+  function renderProjects() {
+    const wasOpen = document.getElementById("workOverlay")?.classList.contains("open");
+    $("projGrid").innerHTML = PROJECTS.map((p, i) => `
+    <button class="proj${wasOpen ? " ready" : ""}" data-i="${i}">
+      <div class="shot"><img src="${esc(p.image)}" alt="${esc(P(p, "imageAlt") || p.title)}" loading="lazy"><span class="badge">${esc(P(p, "type"))}</span></div>
       <div class="info">
         <h3>${esc(p.title)}</h3>
-        <p>${esc(p.summary)}</p>
-        <div class="tag-row">${p.tags.slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-        <span class="open-line">View project ${arrow}</span>
+        <p>${esc(P(p, "summary"))}</p>
+        <div class="tag-row">${p.tags.slice(0, 4).map(tg => `<span class="tag">${esc(tg)}</span>`).join("")}</div>
+        <span class="open-line">${esc(t("view"))} ${arrow}</span>
       </div>
     </button>`).join("");
-  document.querySelectorAll(".proj").forEach(card => {
-    card.addEventListener("animationend", () => card.classList.add("ready"));
-    card.addEventListener("click", () => openDetail(+card.dataset.i, card));
-  });
+    document.querySelectorAll(".proj").forEach(card => {
+      card.addEventListener("animationend", () => card.classList.add("ready"));
+      card.addEventListener("click", () => openDetail(+card.dataset.i, card));
+      cardHooks.forEach(f => f(card));
+    });
+  }
+  renderProjects();
+  langHooks.push(renderProjects);
 
   // Theme toggle
   const root = document.documentElement;
   try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch {}
   const THEMES = ["light", "dark", "space"];
-  const THEME_MSG = { light: "☀️ Light mode", dark: "🌙 Dark mode", space: "🚀 Space mode, welcome aboard!" };
   $("themeBtn").onclick = () => {
     const cur = root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
@@ -894,7 +1003,20 @@
     const apply = () => { root.dataset.theme = next; };
     if (document.startViewTransition && !reduce) document.startViewTransition(apply); else apply();
     try { localStorage.setItem("theme", next); } catch {}
-    toast(THEME_MSG[next]);
+    toast(t("themes")[next]);
+  };
+
+  // Language toggle
+  applyLang();
+  $("langBtn").onclick = () => {
+    const next = L() === "sq" ? "en" : "sq";
+    const r = $("langBtn").getBoundingClientRect();
+    root.style.setProperty("--tx", (r.left + r.width / 2) + "px");
+    root.style.setProperty("--ty", (r.top + r.height / 2) + "px");
+    const apply = () => { root.lang = next; applyLang(); };
+    if (document.startViewTransition && !reduce) document.startViewTransition(apply); else apply();
+    try { localStorage.setItem("lang", next); } catch {}
+    toast(T[next].switched);
   };
 
   // Space mode star field (drawn once with box-shadows)
@@ -950,15 +1072,23 @@
 
   // ---------- Project detail (expands from the clicked card) ----------
   const detailEl = $("detail"), backdrop = $("detailBackdrop");
-  let fromCard = null;
+  let fromCard = null, detailIndex = -1;
+  function fillDetail(p) {
+    $("dImg").src = p.image; $("dImg").alt = P(p, "imageAlt") || p.title;
+    $("detailTitle").textContent = p.title;
+    $("dDesc").textContent = P(p, "summary");
+    $("dType").textContent = P(p, "type");
+    $("dFeatures").innerHTML = P(p, "features").map(f => `<li>${esc(f)}</li>`).join("");
+  }
+  langHooks.push(() => {
+    if (!detailEl.classList.contains("open")) return;
+    fillDetail(PROJECTS[detailIndex]);
+    fromCard = document.querySelector(`.proj[data-i="${detailIndex}"]`);
+  });
   function openDetail(i, card) {
     const p = PROJECTS[i];
-    fromCard = card;
-    $("dImg").src = p.image; $("dImg").alt = p.imageAlt || p.title;
-    $("detailTitle").textContent = p.title;
-    $("dDesc").textContent = p.summary;
-    $("dType").textContent = p.type;
-    $("dFeatures").innerHTML = p.features.map(f => `<li>${esc(f)}</li>`).join("");
+    fromCard = card; detailIndex = i;
+    fillDetail(p);
     $("dTags").innerHTML = p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("");
     $("dLink").href = p.url;
     detailEl.classList.add("open"); backdrop.classList.add("open");
@@ -1003,7 +1133,7 @@
   // Copy contact details
   document.querySelectorAll(".copy-btn").forEach(btn => btn.addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(btn.dataset.copy); } catch { return; }
-    btn.classList.add("done"); btn.title = "Copied!"; toast("Copied to clipboard ✓");
+    btn.classList.add("done"); btn.title = "Copied!"; toast(t("copied"));
     setTimeout(() => { btn.classList.remove("done"); btn.title = "Copy"; }, 1800);
   }));
 
@@ -1024,17 +1154,18 @@
 
   // typing headline
   (function () {
-    const words = ["fast", "friendly", "modern", "real-time", "reliable"];
     const el = $("typer");
+    let w = 0, i, del = true;
+    const reset = () => { w = 0; el.textContent = t("words")[0]; i = el.textContent.length; del = true; };
+    reset(); langHooks.push(reset);
     if (reduce) return;
-    let w = 0, i = words[0].length, del = true;
     setTimeout(function tick() {
-      const word = words[w];
+      const words = t("words"), word = words[w % words.length];
       i += del ? -1 : 1;
       el.textContent = word.slice(0, i) || "​";
       let wait = del ? 45 : 85;
       if (!del && i === word.length) { del = true; wait = 1900; }
-      else if (del && i === 0) { del = false; w = (w + 1) % words.length; wait = 250; }
+      else if (del && i <= 0) { del = false; i = 0; w = (w + 1) % words.length; wait = 250; }
       setTimeout(tick, wait);
     }, 2200);
   })();
@@ -1053,10 +1184,9 @@
 
   // astronaut: speech bubble on click, follows the mouse a little
   (function () {
-    const lines = ["Hi there! 👋", "Welcome aboard 🚀", "Need a website?", "Check out my work!", "Coffee first ☕", "Houston, we have a website", "Let's build something!"];
-    let n = 0, t;
+    let n = 0, bt;
     const bubble = $("bubble"), av = $("avatar");
-    function say() { bubble.textContent = lines[n++ % lines.length]; bubble.classList.add("show"); clearTimeout(t); t = setTimeout(() => bubble.classList.remove("show"), 2200); }
+    function say() { const lines = t("lines"); bubble.textContent = lines[n++ % lines.length]; bubble.classList.add("show"); clearTimeout(bt); bt = setTimeout(() => bubble.classList.remove("show"), 2200); }
     av.addEventListener("click", () => { say(); burst(av); });
     setTimeout(say, 1600);
     if (fine && !reduce) addEventListener("mousemove", e => {
@@ -1167,7 +1297,7 @@
 
     // magnetic buttons
     document.addEventListener("pointermove", e => {
-      const b = e.target.closest(".btn, .theme-btn, .totop");
+      const b = e.target.closest(".btn, .theme-btn, .totop, .lang");
       document.querySelectorAll(".magnet").forEach(m => { if (m !== b) { m.style.translate = ""; m.classList.remove("magnet"); } });
       if (!b) return;
       const r = b.getBoundingClientRect();
@@ -1189,6 +1319,7 @@
     }
     document.querySelectorAll(".skill-box, .contact-item").forEach(el => tilt(el, 10));
     document.querySelectorAll(".proj").forEach(el => tilt(el, 7));
+    cardHooks.push(el => tilt(el, 7));
   }
 
   addEventListener("keydown", e => {
