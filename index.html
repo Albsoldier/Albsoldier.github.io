@@ -580,6 +580,15 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     .term-line .prompt b { display: none; }
   }
 
+  /* ================= Throwable astronaut ================= */
+  .avatar { cursor: grab; touch-action: none; -webkit-user-drag: none; }
+  .avatar img { -webkit-user-drag: none; user-select: none; pointer-events: none; }
+  .astro-fly header.hero { overflow: visible; }
+  .astro-fly .blob { display: none; }
+  .astro-fly .avatar-wrap { animation-play-state: paused; z-index: 15; }
+  .avatar-wrap.held .avatar { cursor: grabbing; scale: 1.08; }
+  .astro-fly .orbit { animation-duration: 2s; }
+
   /* ================= Coffee secret ================= */
   body.over-cup { cursor: pointer; }
   .bean-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 94; pointer-events: none; }
@@ -1027,7 +1036,11 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       projects: n => n + (n === 1 ? " project" : " projects"), view: "View project", copied: "Copied to clipboard ✓",
       themes: { light: "☀️ Light mode", dark: "🌙 Dark mode", space: "🚀 Space mode, welcome aboard!" }, switched: "🇬🇧 English",
       zgOn: "🪐 Zero gravity! Grab things and throw them",
-      beans: "☕ Coffee break! You found the coffee secret"
+      beans: "☕ Coffee break! You found the coffee secret",
+      held: ["Hey, put me down! 😳", "Where are we going?", "Easy with the helmet!"],
+      fly: ["Wheee! 🚀", "To infinity! ✨", "Zero-G baby! 🪐", "I believe I can fly!"],
+      bump: ["Ouch! 💥", "Houston, we have a problem!", "My helmet! 😵", "Oof!"],
+      home: ["Back at my desk 💻", "Safe landing 🛬", "Let's do that again!", "Phew… back to work"]
     },
     sq: {
       title: "Albsoldier · Zhvillues Web", desc: "Portofoli i Albsoldier, zhvillues web që ndërton faqe interneti të shpejta dhe miqësore.",
@@ -1036,7 +1049,11 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       projects: n => n + (n === 1 ? " projekt" : " projekte"), view: "Shiko projektin", copied: "U kopjua ✓",
       themes: { light: "☀️ Tema e ndritshme", dark: "🌙 Tema e errët", space: "🚀 Tema Hapësirë, mirë se erdhe në bord!" }, switched: "🇦🇱 Shqip",
       zgOn: "🪐 Zero gravitet! Kap gjërat dhe hidhi",
-      beans: "☕ Pushim kafeje! Gjete sekretin e kafesë"
+      beans: "☕ Pushim kafeje! Gjete sekretin e kafesë",
+      held: ["Hej, më lësho! 😳", "Ku po shkojmë?", "Kujdes me helmetën!"],
+      fly: ["Uaaa! 🚀", "Drejt pafundësisë! ✨", "Zero gravitet! 🪐", "Po fluturoj!"],
+      bump: ["Au! 💥", "Houston, kemi një problem!", "Helmeta ime! 😵", "Uf!"],
+      home: ["Përsëri te tavolina 💻", "Ulje e sigurt 🛬", "Edhe një herë!", "Uf… kthehemi në punë"]
     }
   };
   const L = () => document.documentElement.lang === "sq" ? "sq" : "en";
@@ -1284,7 +1301,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   (function () {
     let n = 0, bt;
     const bubble = $("bubble"), av = $("avatar");
-    function say() { const lines = t("lines"); bubble.textContent = lines[n++ % lines.length]; bubble.classList.add("show"); clearTimeout(bt); bt = setTimeout(() => bubble.classList.remove("show"), 2200); }
+    function sayText(txt, ms = 2200) { bubble.textContent = txt; bubble.classList.add("show"); clearTimeout(bt); bt = setTimeout(() => bubble.classList.remove("show"), ms); }
+    function say() { const lines = t("lines"); sayText(lines[n++ % lines.length]); }
+    astroSay = sayText;
     av.addEventListener("click", () => { say(); burst(av); });
     setTimeout(say, 1600);
     if (fine && !reduce) addEventListener("mousemove", e => {
@@ -1424,6 +1443,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
   // ================= Zero gravity =================
   let zeroG = false, zeroGStart = () => {};
+  var astroSay;
   document.querySelectorAll(".in").forEach(el => el.addEventListener("animationend", () => el.classList.add("settled"), { once: true }));
   (function () {
     const SEL = ".logo, .eyebrow, h1, .lead, .btns .btn, .stat, .avatar-wrap, section h2, section .sub, .hint, .folder, .skill-box, .step, #about p, .contact-card > p, .contact-item, footer .wrap";
@@ -1535,6 +1555,87 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     addEventListener("resize", () => { if (zeroG) stop(); });
   })();
 
+
+  // ================= Throwable astronaut =================
+  (function () {
+    const wrap = document.querySelector(".avatar-wrap"), av = $("avatar");
+    let st = null, raf = 0, justThrown = false, lastSay = 0, homeT = 0;
+    const line = k => { const a = t(k); return a[Math.floor(Math.random() * a.length)]; };
+    const say = (k, force) => { const now = performance.now(); if (force || now - lastSay > 900) { lastSay = now; astroSay(line(k), 1400); } };
+    const navBottom = () => document.querySelector("nav").getBoundingClientRect().bottom;
+
+    function begin(e) {
+      if (zeroG || document.body.classList.contains("locked") || e.button > 0) return;
+      cancelAnimationFrame(raf); raf = 0; clearTimeout(homeT);
+      const tr = getComputedStyle(wrap).transform;
+      wrap.style.transition = "none"; wrap.style.transform = "";
+      const r = wrap.getBoundingClientRect();
+      const m = tr && tr !== "none" ? new DOMMatrix(tr) : new DOMMatrix();
+      st = { homeX: r.left + scrollX, homeY: r.top + scrollY, w: r.width, h: r.height,
+        x: m.m41, y: m.m42, a: 0, vx: 0, vy: 0, va: 0, px: e.clientX, py: e.clientY, ox: m.m41, oy: m.m42,
+        hist: [{ x: e.clientX, y: e.clientY, t: performance.now() }], id: e.pointerId, dragging: false, flying: false, since: 0 };
+      wrap.style.transform = `translate(${st.x}px, ${st.y}px)`;
+    }
+    function move(e) {
+      if (!st || e.pointerId !== st.id || st.flying) return;
+      const dx = e.clientX - st.px, dy = e.clientY - st.py;
+      if (!st.dragging && Math.hypot(dx, dy) < 6) return;
+      if (!st.dragging) { st.dragging = true; document.documentElement.classList.add("astro-fly"); wrap.classList.add("held"); say("held", true); }
+      st.x = st.ox + dx; st.y = st.oy + dy;
+      st.hist.push({ x: e.clientX, y: e.clientY, t: performance.now() }); if (st.hist.length > 6) st.hist.shift();
+      wrap.style.transform = `translate(${st.x}px, ${st.y}px) rotate(${clamp(dx * .08, -25, 25)}deg)`;
+      e.preventDefault();
+    }
+    function end(e) {
+      if (!st || e.pointerId !== st.id || st.flying) return;
+      wrap.classList.remove("held");
+      if (!st.dragging) { st = null; return; }   // just a click: let the speech bubble happen
+      justThrown = true; setTimeout(() => justThrown = false, 50);
+      const h = st.hist, a = h[0], z = h[h.length - 1], k = 16 / Math.max(16, z.t - a.t);
+      st.vx = clamp((z.x - a.x) * k, -45, 45); st.vy = clamp((z.y - a.y) * k, -45, 45); st.va = st.vx * .6;
+      st.flying = true; st.since = performance.now();
+      if (Math.hypot(st.vx, st.vy) > 6) say("fly", true);
+      if (reduce) return goHome();
+      raf = requestAnimationFrame(step);
+    }
+    function step(now) {
+      const g = .28, top = navBottom(), W = innerWidth, H = innerHeight;
+      st.vy += g; st.vx *= .995; st.vy *= .995; st.va *= .99;
+      st.x += st.vx; st.y += st.vy; st.a += st.va;
+      // edges of the screen, in viewport coordinates
+      const left = st.homeX - scrollX + st.x, tp = st.homeY - scrollY + st.y;
+      let hit = 0;
+      if (left < 0) { st.x -= left; hit = Math.abs(st.vx); st.vx = Math.abs(st.vx) * .72; }
+      if (left + st.w > W) { st.x -= left + st.w - W; hit = Math.abs(st.vx); st.vx = -Math.abs(st.vx) * .72; }
+      if (tp < top) { st.y += top - tp; hit = Math.max(hit, Math.abs(st.vy)); st.vy = Math.abs(st.vy) * .72; }
+      if (tp + st.h > H) { st.y -= tp + st.h - H; hit = Math.max(hit, Math.abs(st.vy)); st.vy = -Math.abs(st.vy) * .72; st.vx *= .9; st.va = st.vx * .8; }
+      if (hit > 9) { say("bump"); if (hit > 16) burst(av); }
+      wrap.style.transform = `translate(${st.x}px, ${st.y}px) rotate(${st.a}deg)`;
+      $("bubble").style.rotate = `${-st.a}deg`;
+      const slow = Math.hypot(st.vx, st.vy) < 1.2 && tp + st.h >= H - 2;
+      if (now - st.since > 4200 || (slow && now - st.since > 900)) return goHome();
+      raf = requestAnimationFrame(step);
+    }
+    function goHome() {
+      cancelAnimationFrame(raf); raf = 0;
+      const turns = Math.round(st.a / 360) * 360;
+      wrap.style.transform = `translate(${st.x}px, ${st.y}px) rotate(${st.a - turns}deg)`;
+      void wrap.offsetWidth;
+      wrap.style.transition = `transform ${reduce ? 0 : 1.1}s cubic-bezier(.34,1.3,.5,1)`;
+      wrap.style.transform = "translate(0px, 0px) rotate(0deg)";
+      $("bubble").style.rotate = "";
+      homeT = setTimeout(() => {
+        wrap.style.transition = ""; wrap.style.transform = "";
+        document.documentElement.classList.remove("astro-fly"); st = null;
+        say("home", true);
+      }, reduce ? 0 : 1150);
+    }
+    av.addEventListener("pointerdown", begin);
+    addEventListener("pointermove", move, { passive: false });
+    addEventListener("pointerup", end); addEventListener("pointercancel", end);
+    av.addEventListener("click", e => { if (justThrown || (st && st.flying)) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+    av.addEventListener("dragstart", e => e.preventDefault());
+  })();
 
   // ================= Coffee secret: click the cup 3 times =================
   let beanRain = () => {};
