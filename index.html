@@ -726,6 +726,93 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   /* ================= Comet mouse trail ================= */
   .comet { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 93; pointer-events: none; }
 
+  /* ================= Modals (shared) ================= */
+  .modal-bg { position: fixed; inset: 0; z-index: 99; background: rgba(5,4,12,.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .modal-bg.open { opacity: 1; pointer-events: auto; }
+  .modal { position: fixed; z-index: 100; left: 50%; top: 50%; width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); overflow-y: auto;
+    transform: translate(-50%, -50%); background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 22px; padding: 22px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.4); animation: modalIn .35s cubic-bezier(.2,.8,.2,1); }
+  .modal[hidden] { display: none; }
+  @keyframes modalIn { from { opacity: 0; transform: translate(-50%, -46%) scale(.96); } }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .modal-head h3 { margin: 0; font-size: 20px; }
+  .modal-x { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border); background: none; color: var(--text); cursor: pointer; font-size: 15px; flex-shrink: 0; }
+  .modal-foot { display: flex; justify-content: center; margin-top: 16px; }
+  .link-btn { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 13px; }
+
+  /* ================= Achievements ================= */
+  .trophy-btn { position: fixed; left: 18px; bottom: 18px; z-index: 30; height: 52px; min-width: 52px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); box-shadow: var(--shadow); cursor: pointer; display: none; align-items: center; justify-content: center; gap: 6px; font-size: 20px; transition: transform .25s; }
+  .trophy-btn b { font-size: 14px; font-variant-numeric: tabular-nums; }
+  .trophy-btn:hover { transform: translateY(-3px); }
+  .has-ach .trophy-btn { display: inline-flex; }
+  .trophy-btn.bump { animation: tbump .6s cubic-bezier(.34,1.6,.5,1); }
+  @keyframes tbump { 40% { transform: scale(1.25) rotate(-8deg); } }
+  .has-ach .zerog-btn { bottom: 80px; }
+  .xmas.xm-snow.has-ach .zerog-btn { bottom: 96px; }
+  .xmas.xm-snow .trophy-btn { bottom: 34px; }
+  @media (max-width: 720px) { .xmas.xm-snow .trophy-btn { bottom: 26px; } .xmas.xm-snow.has-ach .zerog-btn { bottom: 88px; } }
+  .zero-g .trophy-btn { display: none; }
+  .ach-pop { position: fixed; z-index: 101; left: 50%; top: 76px; transform: translate(-50%, -140%); width: min(380px, calc(100vw - 32px));
+    display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 18px; background: var(--surface); color: var(--text);
+    border: 1px solid color-mix(in srgb, #f59e0b 60%, var(--border)); box-shadow: 0 18px 44px rgba(0,0,0,.3), 0 0 0 4px color-mix(in srgb, #f59e0b 18%, transparent);
+    transition: transform .5s cubic-bezier(.34,1.4,.5,1); pointer-events: none; }
+  .ach-pop.show { transform: translate(-50%, 0); }
+  .ach-pop .em { font-size: 30px; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; flex-shrink: 0;
+    background: linear-gradient(135deg, #fde68a, #f59e0b); box-shadow: inset 0 -3px 0 rgba(0,0,0,.12); }
+  .ach-pop small { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #d97706; font-weight: 700; }
+  .ach-pop b { display: block; font-size: 16px; }
+  .ach-pop span.n { font-size: 12px; color: var(--muted); }
+  .ach-progress { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; font-size: 14px; color: var(--muted); font-weight: 600; }
+  .ach-bar { flex: 1; height: 10px; border-radius: 999px; background: var(--border); overflow: hidden; }
+  .ach-bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #fbbf24, #f59e0b); transition: width .6s cubic-bezier(.2,.8,.2,1); }
+  .ach-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .ach-list li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--border); }
+  .ach-list .em { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; flex-shrink: 0; background: linear-gradient(135deg, #fde68a, #f59e0b); }
+  .ach-list li.locked .em { background: var(--border); filter: grayscale(1); opacity: .55; font-size: 18px; }
+  .ach-list b { display: block; font-size: 15px; }
+  .ach-list span { font-size: 13px; color: var(--muted); }
+  .ach-list li.locked b { color: var(--muted); }
+  /* golden astronaut for finding everything */
+  .gold .avatar { background: linear-gradient(135deg, #fde68a, #f59e0b 45%, #fbbf24 70%, #fff7d6); box-shadow: 0 0 0 3px #fde68a, 0 0 40px rgba(245,158,11,.6), var(--shadow); }
+  .gold .orbit { border-color: rgba(245,158,11,.6); }
+  .gold .orbit::before { background: #fbbf24; box-shadow: 0 0 14px #f59e0b; }
+  .confetti { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 102; pointer-events: none; }
+
+  /* ================= Flag Day (28 Nëntori) ================= */
+  .xm-sep { border: 0; border-top: 1px solid var(--border); margin: 6px 4px; }
+  .eagle-ic { width: 18px; height: 16px; vertical-align: -3px; fill: #e41e20; }
+  .al-flag { position: absolute; z-index: 3; right: -34px; bottom: -8px; width: 82px; height: 150px; pointer-events: none; display: none; transform-origin: 6px 100%; }
+  .flagday .al-flag { display: block; animation: plant .7s cubic-bezier(.34,1.5,.5,1); }
+  @keyframes plant { from { transform: translateY(-50px) rotate(-25deg); opacity: 0; } }
+  .al-flag .pole { position: absolute; left: 4px; top: 0; bottom: 0; width: 4px; border-radius: 2px; background: linear-gradient(90deg, #d4d4d8, #71717a); }
+  .al-flag .pole::before { content: ""; position: absolute; left: -3px; top: -6px; width: 10px; height: 10px; border-radius: 50%; background: #fbbf24; }
+  .al-flag .cloth { position: absolute; left: 8px; top: 2px; width: 74px; height: 53px; transform-origin: 0 50%; animation: wave 2.4s ease-in-out infinite; filter: drop-shadow(0 3px 4px rgba(0,0,0,.25)); }
+  @keyframes wave { 0%, 100% { transform: skewY(0) scaleX(1); } 25% { transform: skewY(-4deg) scaleX(.96); } 50% { transform: skewY(2deg) scaleX(.98); } 75% { transform: skewY(-2deg) scaleX(.95); } }
+  @media (max-width: 720px) { .al-flag { right: -26px; width: 60px; height: 104px; } .al-flag .cloth { width: 52px; height: 37px; } }
+  .flag-badge { display: none; align-items: center; gap: 8px; width: max-content; max-width: 100%; margin: 0 0 10px; padding: 6px 14px 6px 10px; border-radius: 999px;
+    background: #e41e20; color: #fff; font-size: 13px; font-weight: 700; box-shadow: 0 6px 16px rgba(228,30,32,.35); }
+  .flag-badge svg { width: 22px; height: 19px; fill: #111; flex-shrink: 0; }
+  .flagday .flag-badge { display: flex; animation: rise .6s cubic-bezier(.2,.7,.2,1); }
+  .flagday h1 em { background-image: linear-gradient(90deg, #e41e20, #ff5a5c 55%, #b3131a); }
+  .flagday .progress { background: repeating-linear-gradient(-45deg, #e41e20 0 8px, #111 8px 16px); height: 4px; }
+
+  /* ================= Save my contact ================= */
+  .save-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; position: relative; z-index: 1; }
+  .save-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; border: 0; cursor: pointer; font-weight: 700; font-size: 15px;
+    background: #fff; color: #c2410c; box-shadow: 0 6px 16px rgba(0,0,0,.12); transition: transform .2s; }
+  [data-theme="space"] .contact-card .save-btn { color: #6d28d9; }
+  .save-btn:hover { transform: translateY(-2px); }
+  .save-btn svg { width: 18px; height: 18px; }
+  .save-btn.ghost { background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.4); box-shadow: none; }
+  [data-theme="space"] .contact-card .save-btn.ghost { color: #fff; }
+  @media (hover: none), (pointer: coarse) { #showQr { display: none; } }
+  .modal .save-btn { background: var(--accent); color: #fff; }
+  [data-theme="space"] .modal .save-btn { color: #150d2e; }
+  .qr-box { display: grid; place-items: center; margin: 4px auto 12px; padding: 16px; width: max-content; border-radius: 18px; background: #fff; box-shadow: var(--shadow); }
+  .qr-box svg, .qr-box img { display: block; width: 240px; height: 240px; }
+  .qr-cap { text-align: center; color: var(--muted); font-size: 14px; margin: 0 auto; max-width: 380px; }
+
   /* ================= Space mode ================= */
   :root[data-theme="space"] {
     color-scheme: dark;
@@ -855,6 +942,8 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
           <label class="xm-row"><span>🎄 <span data-i18n="x.mode">Christmas mode</span></span><input type="checkbox" role="switch" id="xmMode"><i></i></label>
           <label class="xm-row"><span>💡 <span data-i18n="x.lights">Christmas lights</span></span><input type="checkbox" role="switch" id="xmLights"><i></i></label>
           <label class="xm-row"><span>❄️ <span data-i18n="x.snow">Snow</span></span><input type="checkbox" role="switch" id="xmSnow"><i></i></label>
+          <hr class="xm-sep">
+          <label class="xm-row"><span><svg class="eagle-ic" viewBox="0 0 200 170" aria-hidden="true"><path d="M100 62 L93 52 L88 40 L82 31 L73 27 L65 30 L59 37 L66 38 L71 41 L77 46 L82 55 L84 62 L76 58 L64 47 L51 38 L36 29 L20 22 L6 19 L13 30 L4 34 L15 42 L5 48 L18 55 L8 62 L23 67 L15 75 L31 77 L26 86 L44 86 L53 91 L61 101 L56 114 L65 111 L68 124 L76 117 L80 131 L75 150 L85 142 L88 160 L95 150 L100 167 L105 150 L112 160 L115 142 L125 150 L120 131 L124 117 L132 124 L135 111 L144 114 L139 101 L147 91 L156 86 L174 86 L169 77 L185 75 L177 67 L192 62 L182 55 L195 48 L185 42 L196 34 L187 30 L194 19 L180 22 L164 29 L149 38 L136 47 L124 58 L116 62 L118 55 L123 46 L129 41 L134 38 L141 37 L135 30 L127 27 L118 31 L112 40 L107 52 L100 62 Z"/></svg> <span data-i18n="x.flag">Flag Day (Nov 28)</span></span><input type="checkbox" role="switch" id="xmFlag"><i></i></label>
         </div>
       </li>
       <li><button class="lang" id="langBtn" aria-label="Switch language: English / Albanian" data-i18n-aria="a.lang"><span class="lang-pill" aria-hidden="true"></span><span class="en">EN</span><span class="sq">SQ</span></button></li>
@@ -877,9 +966,11 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       <span class="orbit" aria-hidden="true"></span>
       <div class="bubble" id="bubble" role="status" aria-live="polite"></div>
       <svg class="santa-hat" viewBox="0 0 120 100" aria-hidden="true"><path d="M14 74 C 30 30, 70 6, 104 34 C 92 36, 84 46, 82 62 Z" fill="#dc2626"/><path d="M14 74 C 30 30, 70 6, 104 34 C 96 34, 90 38, 86 44 C 70 28, 40 40, 26 74 Z" fill="#b91c1c" opacity=".55"/><rect x="4" y="66" width="92" height="22" rx="11" fill="#fff"/><circle cx="106" cy="36" r="12" fill="#fff"/></svg>
+      <div class="al-flag" aria-hidden="true"><span class="pole"></span><svg class="cloth" viewBox="0 0 140 100"><defs><linearGradient id="flagShade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".3" stop-color="#fff" stop-opacity=".12"/><stop offset=".55" stop-color="#000" stop-opacity=".16"/><stop offset=".8" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient></defs><rect width="140" height="100" fill="#e41e20"/><g transform="translate(36 12) scale(.36)"><path d="M100 62 L93 52 L88 40 L82 31 L73 27 L65 30 L59 37 L66 38 L71 41 L77 46 L82 55 L84 62 L76 58 L64 47 L51 38 L36 29 L20 22 L6 19 L13 30 L4 34 L15 42 L5 48 L18 55 L8 62 L23 67 L15 75 L31 77 L26 86 L44 86 L53 91 L61 101 L56 114 L65 111 L68 124 L76 117 L80 131 L75 150 L85 142 L88 160 L95 150 L100 167 L105 150 L112 160 L115 142 L125 150 L120 131 L124 117 L132 124 L135 111 L144 114 L139 101 L147 91 L156 86 L174 86 L169 77 L185 75 L177 67 L192 62 L182 55 L195 48 L185 42 L196 34 L187 30 L194 19 L180 22 L164 29 L149 38 L136 47 L124 58 L116 62 L118 55 L123 46 L129 41 L134 38 L141 37 L135 30 L127 27 L118 31 L112 40 L107 52 L100 62 Z" fill="#111"/></g><rect width="140" height="100" fill="url(#flagShade)"/></svg></div>
       <button class="avatar" id="avatar" aria-label="Say hi to the astronaut" data-i18n-aria="a.avatar"><img src="images/avatar.jpg" alt="Albsoldier's profile picture: a cartoon astronaut at a computer" width="168" height="168"></button>
     </div></div>
     <div>
+      <p class="flag-badge"><svg viewBox="0 0 200 170" aria-hidden="true"><path d="M100 62 L93 52 L88 40 L82 31 L73 27 L65 30 L59 37 L66 38 L71 41 L77 46 L82 55 L84 62 L76 58 L64 47 L51 38 L36 29 L20 22 L6 19 L13 30 L4 34 L15 42 L5 48 L18 55 L8 62 L23 67 L15 75 L31 77 L26 86 L44 86 L53 91 L61 101 L56 114 L65 111 L68 124 L76 117 L80 131 L75 150 L85 142 L88 160 L95 150 L100 167 L105 150 L112 160 L115 142 L125 150 L120 131 L124 117 L132 124 L135 111 L144 114 L139 101 L147 91 L156 86 L174 86 L169 77 L185 75 L177 67 L192 62 L182 55 L195 48 L185 42 L196 34 L187 30 L194 19 L180 22 L164 29 L149 38 L136 47 L124 58 L116 62 L118 55 L123 46 L129 41 L134 38 L141 37 L135 30 L127 27 L118 31 L112 40 L107 52 L100 62 Z"/></svg><span data-i18n="f.badge">Happy Independence Day, Albania!</span></p>
       <p class="xmas-badge" data-i18n="x.badge">🎄 Merry Christmas &amp; Happy New Year!</p>
       <p class="eyebrow mono in d1" data-i18n="hero.hi">Hi, I'm Albsoldier 👋</p>
       <h1 class="in d2"><span data-i18n="hero.h1a">I build</span> <em class="typer" id="typer">fast</em> <span data-i18n="hero.h1b">websites for real businesses.</span></h1>
@@ -995,6 +1086,10 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
             <button class="copy-btn" data-copy="+355695289141" aria-label="Copy phone number" title="Copy" data-i18n-aria="a.copyP"><svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></button>
           </div>
         </div>
+        <div class="save-row">
+          <button class="save-btn" id="saveContact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg><span data-i18n="c.save">Save my contact</span></button>
+          <button class="save-btn ghost" id="showQr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg><span data-i18n="c.qr">Show QR code</span></button>
+        </div>
       </div>
     </div>
   </section>
@@ -1004,6 +1099,22 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg>
 </button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="trophy-btn" id="trophyBtn" aria-label="Achievements" data-i18n-aria="a.trophy" aria-haspopup="dialog"><span aria-hidden="true">🏆</span><b id="trophyCount">0</b></button>
+<div class="ach-pop" id="achPop" role="status" aria-live="polite"></div>
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+<div class="modal-bg" id="modalBg"></div>
+<div class="modal" id="achModal" role="dialog" aria-modal="true" aria-labelledby="achTitle" hidden>
+  <div class="modal-head"><h3 id="achTitle"><span aria-hidden="true">🏆</span> <span data-i18n="ach.title">Achievements</span></h3><button class="modal-x" data-close aria-label="Close" data-i18n-aria="a.close">✕</button></div>
+  <div class="ach-progress"><div class="ach-bar"><i id="achBar"></i></div><span id="achCountText"></span></div>
+  <ul class="ach-list" id="achList"></ul>
+  <div class="modal-foot"><button class="link-btn" id="achReset" data-i18n="ach.reset">Reset progress</button></div>
+</div>
+<div class="modal" id="qrModal" role="dialog" aria-modal="true" aria-labelledby="qrTitle" hidden>
+  <div class="modal-head"><h3 id="qrTitle" data-i18n="c.qrTitle">Scan to save my contact</h3><button class="modal-x" data-close aria-label="Close" data-i18n-aria="a.close">✕</button></div>
+  <div class="qr-box" id="qrBox"></div>
+  <p class="qr-cap" data-i18n="c.qrCap">Point your phone camera at the code. It will offer to add me to your contacts.</p>
+  <div class="modal-foot"><button class="save-btn" id="qrDownload"><span data-i18n="c.vcf">Download .vcf file</span></button></div>
+</div>
 <canvas class="snow" id="snow" aria-hidden="true"></canvas>
 <canvas class="comet" id="comet" aria-hidden="true"></canvas>
 <div class="snowbank" id="snowbank" aria-hidden="true"></div>
@@ -1174,6 +1285,10 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     "a.top": "Kthehu në krye", "a.closeF": "Mbyll dosjen", "a.closeP": "Mbyll projektin",
     "a.copyE": "Kopjo adresën e email-it", "a.copyP": "Kopjo numrin e telefonit", "a.lang": "Ndrysho gjuhën: anglisht / shqip",
     "zg.restore": "Rikthe gravitetin",
+    "x.flag": "Dita e Flamurit (28 Nëntori)", "f.badge": "Gëzuar 28 Nëntorin! Rroftë Shqipëria!",
+    "ach.title": "Arritjet", "ach.reset": "Rifillo progresin", "a.trophy": "Arritjet", "a.close": "Mbyll",
+    "c.save": "Ruaj kontaktin tim", "c.qr": "Shfaq kodin QR", "c.qrTitle": "Skano për të ruajtur kontaktin",
+    "c.qrCap": "Drejtoje kamerën e telefonit te kodi. Do të të ofrojë të më shtosh te kontaktet.", "c.vcf": "Shkarko skedarin .vcf",
     "x.title": "Festat", "x.mode": "Tema e Krishtlindjeve", "x.lights": "Dritat e Krishtlindjeve", "x.snow": "Borë",
     "x.badge": "🎄 Gëzuar Krishtlindjet dhe Vitin e Ri!", "a.xmas": "Cilësimet e Krishtlindjeve", "a.sleigh": "Sajja e Babadimrit: kliko për një dhuratë", "term.link": "terminali", "a.zerog": "Aktivizo zero gravitetin"
   };
@@ -1187,6 +1302,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       themes: { light: "☀️ Light mode", dark: "🌙 Dark mode", space: "🚀 Space mode, welcome aboard!" }, switched: "🇬🇧 English",
       zgOn: "🪐 Zero gravity! Grab things and throw them",
       beans: "☕ Coffee break! You found the coffee secret",
+      flagOn: "🦅 Happy Independence Day, Albania! 🇦🇱", flagOff: "Flag Day theme off",
+      achNew: "Achievement unlocked", achAll: "🌟 You found everything! Golden astronaut unlocked", achReset: "Progress reset",
+      saved: "📇 Contact saved! Check your downloads or contacts", of: "of",
       xmasOn: "🎄 Merry Christmas! Ho ho ho!", xmasOff: "Christmas mode off", lightsOn: "💡 Lights on", lightsOff: "Lights off", snowOn: "❄️ Let it snow!", snowOff: "Snow off",
       held: ["Hey, put me down! 😳", "Where are we going?", "Easy with the helmet!"],
       fly: ["Wheee! 🚀", "To infinity! ✨", "Zero-G baby! 🪐", "I believe I can fly!"],
@@ -1201,6 +1319,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       themes: { light: "☀️ Tema e ndritshme", dark: "🌙 Tema e errët", space: "🚀 Tema Hapësirë, mirë se erdhe në bord!" }, switched: "🇦🇱 Shqip",
       zgOn: "🪐 Zero gravitet! Kap gjërat dhe hidhi",
       beans: "☕ Pushim kafeje! Gjete sekretin e kafesë",
+      flagOn: "🦅 Gëzuar 28 Nëntorin! Rroftë Shqipëria! 🇦🇱", flagOff: "Tema e Ditës së Flamurit u fik",
+      achNew: "Arritje e re", achAll: "🌟 I gjete të gjitha! Astronauti i artë u zhbllokua", achReset: "Progresi u rifillua",
+      saved: "📇 Kontakti u ruajt! Shiko shkarkimet ose kontaktet", of: "nga",
       xmasOn: "🎄 Gëzuar Krishtlindjet! Ho ho ho!", xmasOff: "Tema e Krishtlindjeve u fik", lightsOn: "💡 Dritat u ndezën", lightsOff: "Dritat u fikën", snowOn: "❄️ Le të bjerë borë!", snowOff: "Bora u fik",
       held: ["Hej, më lësho! 😳", "Ku po shkojmë?", "Kujdes me helmetën!"],
       fly: ["Uaaa! 🚀", "Drejt pafundësisë! ✨", "Zero gravitet! 🪐", "Po fluturoj!"],
@@ -1272,6 +1393,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     if (document.startViewTransition && !reduce) document.startViewTransition(apply); else apply();
     try { localStorage.setItem("theme", next); } catch {}
     toast(t("themes")[next]);
+    if (next === "space") unlock("space");
   }
   $("themeBtn").onclick = () => setTheme(THEMES[(THEMES.indexOf(curTheme()) + 1) % THEMES.length]);
 
@@ -1282,7 +1404,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     const apply = () => { root.lang = next; applyLang(); };
     if (document.startViewTransition && !reduce) document.startViewTransition(apply); else apply();
     try { localStorage.setItem("lang", next); } catch {}
-    toast(T[next].switched);
+    toast(T[next].switched); setTimeout(() => unlock("polyglot"), 450);
   }
   $("langBtn").onclick = () => setLang(L() === "sq" ? "en" : "sq");
 
@@ -1604,7 +1726,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
     function start() {
       if (zeroG || document.body.classList.contains("locked")) return;
-      zeroG = true;
+      zeroG = true; unlock("zerog");
       document.querySelectorAll(".in").forEach(el => el.classList.add("settled"));
       document.querySelectorAll(".reveal").forEach(el => el.classList.add("shown"));
       document.documentElement.classList.add("zero-g");
@@ -1709,6 +1831,193 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
 
 
+
+
+  // ================= Achievements =================
+  const ACH = [
+    { id: "space",     em: "🪐", en: ["Space Cadet", "Switched to Space mode"],               sq: ["Kadet Hapësire", "Kalove në temën Hapësirë"],
+      hint: ["Try a different theme…", "Provo një temë tjetër…"] },
+    { id: "zerog",     em: "🧑‍🚀", en: ["Zero-G Pilot", "Turned off gravity"],                 sq: ["Pilot Zero-G", "Fike gravitetin"],
+      hint: ["What goes up doesn't have to come down…", "Çfarë ngjitet lart s'ka pse të bjerë…"] },
+    { id: "terminal",  em: "💻", en: ["Hacker", "Opened the secret terminal"],                  sq: ["Haker", "Hape terminalin sekret"],
+      hint: ["Real developers use the keyboard (~)", "Zhvilluesit e vërtetë përdorin tastierën (~)"] },
+    { id: "coffee",    em: "☕", en: ["Caffeinated", "Found the coffee secret"],                sq: ["I Kafeinuar", "Gjete sekretin e kafesë"],
+      hint: ["Every developer needs coffee. Find the cup", "Çdo zhvillues ka nevojë për kafe. Gjej filxhanin"] },
+    { id: "throw",     em: "🚀", en: ["Astronaut Tosser", "Threw the astronaut"],               sq: ["Hedhës Astronautësh", "Hodhe astronautin"],
+      hint: ["The astronaut is lighter than he looks", "Astronauti është më i lehtë se duket"] },
+    { id: "sleigh",    em: "🎅", en: ["Santa Spotter", "Caught Santa's sleigh"],                sq: ["Pa Babadimrin", "Kape sajën e Babadimrit"],
+      hint: ["Something flies by in Christmas mode", "Diçka fluturon në temën e Krishtlindjeve"] },
+    { id: "polyglot",  em: "🗣️", en: ["Polyglot", "Switched the language"],                    sq: ["Poliglot", "Ndryshove gjuhën"],
+      hint: ["Flet shqip?", "Do you speak English?"] },
+    { id: "explorer",  em: "📂", en: ["Explorer", "Looked at every project"],                   sq: ["Eksplorues", "Pe çdo projekt"],
+      hint: ["Open every project in the folder", "Hap çdo projekt në dosje"] },
+    { id: "sudo",      em: "🔓", en: ["Nice Try", "Asked the terminal for superpowers"],        sq: ["Përpjekje e Mirë", "I kërkove terminalit superfuqi"],
+      hint: ["sudo make me a sandwich", "sudo më bëj një sanduiç"] },
+    { id: "patriot",   em: "🦅", en: ["Patriot", "Celebrated Albania's Flag Day"],              sq: ["Patriot", "Festove Ditën e Flamurit"],
+      hint: ["Celebrate the 28th of November", "Festo 28 Nëntorin"] },
+    { id: "networker", em: "📇", en: ["Networker", "Saved my contact"],                         sq: ["Në Kontakt", "Ruajte kontaktin tim"],
+      hint: ["Keep my details for later", "Ruaj të dhënat e mia për më vonë"] }
+  ];
+  var achApi;
+  function unlock(id) { if (achApi) achApi.unlock(id); }
+  (function () {
+    const R = document.documentElement;
+    let got = []; try { got = JSON.parse(localStorage.getItem("ach") || "[]"); } catch {}
+    got = got.filter(id => ACH.some(a => a.id === id));
+    const save = () => { try { localStorage.setItem("ach", JSON.stringify(got)); } catch {} };
+    const queue = []; let showing = false;
+    function refresh() {
+      R.classList.toggle("has-ach", got.length > 0);
+      R.classList.toggle("gold", got.length === ACH.length);
+      $("trophyCount").textContent = got.length + "/" + ACH.length;
+      const sq = L() === "sq";
+      $("achBar").style.width = (got.length / ACH.length * 100) + "%";
+      $("achCountText").textContent = `${got.length} ${t("of")} ${ACH.length}`;
+      $("achList").innerHTML = ACH.map(a => {
+        const has = got.includes(a.id), txt = sq ? a.sq : a.en;
+        return `<li class="${has ? "" : "locked"}"><span class="em" aria-hidden="true">${has ? a.em : "🔒"}</span><div><b>${has ? esc(txt[0]) : "???"}</b><span>${esc(has ? txt[1] : a.hint[sq ? 1 : 0])}</span></div></li>`;
+      }).join("");
+    }
+    function next() {
+      if (showing || !queue.length) return;
+      showing = true;
+      const a = queue.shift(), txt = L() === "sq" ? a.sq : a.en, pop = $("achPop");
+      pop.innerHTML = `<span class="em" aria-hidden="true">${a.em}</span><div><small>🏆 ${esc(t("achNew"))}</small><b>${esc(txt[0])}</b><span class="n">${esc(txt[1])} · ${got.indexOf(a.id) + 1}/${ACH.length}</span></div>`;
+      pop.classList.add("show");
+      const tb = $("trophyBtn"); tb.classList.remove("bump"); void tb.offsetWidth; tb.classList.add("bump");
+      confetti(["#fbbf24", "#f59e0b", "#fde68a", "#fff"], 70, innerWidth / 2, 110);
+      setTimeout(() => { pop.classList.remove("show"); setTimeout(() => { showing = false; next(); }, 450); }, 2800);
+    }
+    achApi = {
+      unlock(id) {
+        if (got.includes(id)) return;
+        const a = ACH.find(x => x.id === id); if (!a) return;
+        got.push(id); save(); refresh(); queue.push(a); next();
+        if (got.length === ACH.length) setTimeout(() => { toast(t("achAll")); confetti(["#fbbf24", "#f59e0b", "#fde68a", "#fff", "#e41e20"], 220); }, 3400);
+      },
+      list: () => got.slice()
+    };
+    $("trophyBtn").addEventListener("click", () => openModal("achModal"));
+    $("achReset").addEventListener("click", () => { got = []; save(); refresh(); closeModal(); toast(t("achReset")); });
+    langHooks.push(refresh);
+    refresh();
+  })();
+
+  // ---------- shared modal helpers ----------
+  let modalOpen = null, modalFocus = null;
+  function openModal(id) {
+    closeModal(true);
+    modalFocus = document.activeElement; modalOpen = $(id);
+    modalOpen.hidden = false; $("modalBg").classList.add("open"); document.body.classList.add("locked");
+    const x = modalOpen.querySelector("[data-close]"); if (x) x.focus({ preventScroll: true });
+  }
+  function closeModal(quiet) {
+    if (!modalOpen) return;
+    modalOpen.hidden = true; modalOpen = null; $("modalBg").classList.remove("open"); document.body.classList.remove("locked");
+    if (!quiet && modalFocus && modalFocus.focus) modalFocus.focus({ preventScroll: true });
+  }
+  document.querySelectorAll(".modal [data-close]").forEach(b => b.addEventListener("click", () => closeModal()));
+  $("modalBg").addEventListener("click", () => closeModal());
+  addEventListener("keydown", e => { if (e.key === "Escape" && modalOpen) { e.stopImmediatePropagation(); closeModal(); } }, true);
+
+  // ---------- confetti (used by achievements and Flag Day) ----------
+  function confetti(colors, n = 120, ox, oy) {
+    if (reduce) return;
+    const c = $("confetti"), ctx = c.getContext("2d"), dpr = Math.min(devicePixelRatio || 1, 2);
+    const W = innerWidth, H = innerHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const parts = c._parts || (c._parts = []);
+    for (let i = 0; i < n; i++) {
+      const fromTop = ox == null;
+      parts.push({ x: fromTop ? Math.random() * W : ox, y: fromTop ? -20 - Math.random() * H * .5 : oy,
+        vx: fromTop ? (Math.random() - .5) * 2 : (Math.random() - .5) * 12, vy: fromTop ? 2 + Math.random() * 3 : -4 - Math.random() * 7,
+        a: Math.random() * 6.28, va: (Math.random() - .5) * .3, w: 6 + Math.random() * 6, h: 4 + Math.random() * 6,
+        c: colors[Math.floor(Math.random() * colors.length)], life: 0, max: 220 + Math.random() * 120 });
+    }
+    if (c._raf) return;
+    (function frame() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.vy += .12; p.vx *= .99; p.x += p.vx + Math.sin(p.life / 12) * .6; p.y += p.vy; p.a += p.va; p.life++;
+        if (p.life > p.max || p.y > H + 30) { parts.splice(i, 1); continue; }
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.globalAlpha = Math.min(1, (p.max - p.life) / 40);
+        ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.life / 9))); ctx.restore();
+      }
+      c._raf = parts.length ? requestAnimationFrame(frame) : (ctx.clearRect(0, 0, W, H), 0);
+    })();
+  }
+
+  // ================= Flag Day: 28 Nëntori =================
+  let flagApi = { toggle() {} };
+  (function () {
+    const R = document.documentElement, now = new Date(), m = now.getMonth(), d = now.getDate();
+    const inSeason = m === 10 && d >= 25 || m === 11 && d <= 1;          // 25 Nov – 1 Dec
+    let on = inSeason; try { const v = localStorage.getItem("flag"); if (v != null) on = v === "1"; } catch {}
+    const RED = ["#e41e20", "#e41e20", "#b3131a", "#111", "#111", "#fbbf24"];
+    function apply(announce) {
+      R.classList.toggle("flagday", on); $("xmFlag").checked = on;
+      if (on) {
+        unlock("patriot");
+        let shown = false; try { shown = sessionStorage.getItem("flagBurst") === "1"; } catch {}
+        if (announce || !shown) { setTimeout(() => confetti(RED, 160), announce ? 0 : 900); try { sessionStorage.setItem("flagBurst", "1"); } catch {} }
+      }
+    }
+    function set(v) { on = v; try { localStorage.setItem("flag", v ? "1" : "0"); } catch {} apply(true); toast(t(v ? "flagOn" : "flagOff")); }
+    $("xmFlag").addEventListener("change", e => set(e.target.checked));
+    flagApi = { toggle(v) { set(v == null ? !on : v); return on; } };
+    apply(false);
+  })();
+
+  // ================= Save my contact (vCard + QR) =================
+  (function () {
+    const CONTACT = { name: "Albsoldier", title: "Web Developer", org: "albsoldier.dev", email: "jurgen.kapllani@hotmail.com", tel: "+355695289141", url: "https://albsoldier.github.io" };
+    function vcard(photo) {
+      const lines = ["BEGIN:VCARD", "VERSION:3.0", `N:;${CONTACT.name};;;`, `FN:${CONTACT.name}`, `ORG:${CONTACT.org}`, `TITLE:${CONTACT.title}`,
+        `TEL;TYPE=CELL:${CONTACT.tel}`, `EMAIL;TYPE=INTERNET:${CONTACT.email}`, `URL:${CONTACT.url}`];
+      if (photo) lines.push("PHOTO;ENCODING=b;TYPE=JPEG:" + photo);
+      lines.push("END:VCARD");
+      return lines.join("\r\n") + "\r\n";
+    }
+    async function photo64() {
+      try {
+        const img = new Image(); img.src = "images/avatar.jpg"; await img.decode();
+        const c = document.createElement("canvas"); c.width = c.height = 120; c.getContext("2d").drawImage(img, 0, 0, 120, 120);
+        return c.toDataURL("image/jpeg", .8).split(",")[1];
+      } catch { return ""; }
+    }
+    async function download() {
+      const blob = new Blob([vcard(await photo64())], { type: "text/vcard;charset=utf-8" });
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "albsoldier.vcf";
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      toast(t("saved")); unlock("networker");
+    }
+    let qrLoaded = null;
+    function loadQr() {
+      if (window.qrcode) return Promise.resolve();
+      return qrLoaded || (qrLoaded = new Promise((res, rej) => { const sc = document.createElement("script"); sc.src = "js/qrcode.js"; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); }));
+    }
+    async function showQr() {
+      openModal("qrModal");
+      try {
+        await loadQr();
+        const q = qrcode(0, "M"); q.addData(vcard()); q.make();
+        $("qrBox").innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+      } catch { $("qrBox").textContent = "QR unavailable"; }
+      unlock("networker");
+    }
+    $("saveContact").addEventListener("click", download);
+    $("qrDownload").addEventListener("click", download);
+    $("showQr").addEventListener("click", showQr);
+  })();
+
+  // track the project folder for the Explorer achievement
+  (function () {
+    const seen = new Set();
+    document.addEventListener("click", e => {
+      const c = e.target.closest(".proj"); if (!c) return;
+      seen.add(c.dataset.i); if (seen.size >= PROJECTS.length) unlock("explorer");
+    });
+  })();
 
   // ================= Comet mouse trail =================
   let cometApi = { toggle() { return false; } };
@@ -1908,7 +2217,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         g.animate([{ transform: "translate(-50%,0) rotate(0)", opacity: 1 }, { transform: `translate(calc(-50% + ${dx}px), ${innerHeight - y - 30}px) rotate(${dx * 2}deg)`, opacity: 1, offset: .85 },
           { transform: `translate(calc(-50% + ${dx}px), ${innerHeight - y - 30}px) rotate(${dx * 2}deg)`, opacity: 0 }], { duration: dur, easing: "cubic-bezier(.4,0,.8,.6)" }).onfinish = () => g.remove();
       }
-      toast("🎅 Ho ho ho!");
+      toast("🎅 Ho ho ho!"); unlock("sleigh");
     });
 
     // ---- apply ----
@@ -1984,7 +2293,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       justThrown = true; setTimeout(() => justThrown = false, 50);
       const h = st.hist, a = h[0], z = h[h.length - 1], k = 16 / Math.max(16, z.t - a.t);
       st.vx = clamp((z.x - a.x) * k, -45, 45); st.vy = clamp((z.y - a.y) * k, -45, 45); st.va = st.vx * .6;
-      st.flying = true; st.since = performance.now();
+      st.flying = true; st.since = performance.now(); unlock("throw");
       if (Math.hypot(st.vx, st.vy) > 6) say("fly", true);
       if (reduce) return goHome();
       raf = requestAnimationFrame(step);
@@ -2045,6 +2354,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     }
 
     beanRain = function () {
+      unlock("coffee");
       toast(t("beans"));
       if (reduce || raining) return;
       raining = true;
@@ -2100,7 +2410,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         welcome: "Welcome to <span class='acc'>albsoldier.dev</span> 🚀  Type <b class='ok'>help</b> to see what you can do.",
         tip: "Tip: ↑ ↓ for history, Tab to autocomplete, Esc to close.",
         help: { help: "show this list", about: "who I am", projects: "list my projects", "open <n>": "open a project", skills: "what I work with",
-          contact: "how to reach me", theme: "light, dark or space", lang: "en or sq", gravity: "turn off gravity", comet: "mouse comet on/off", xmas: "Christmas mode on/off", snow: "let it snow", coffee: "take a break",
+          contact: "how to reach me", theme: "light, dark or space", lang: "en or sq", gravity: "turn off gravity", trophies: "your achievements", flag: "Flag Day (28 Nov)", comet: "mouse comet on/off", xmas: "Christmas mode on/off", snow: "let it snow", coffee: "take a break",
           rocket: "launch a rocket", ls: "list files", "cat <file>": "read a file", date: "time in Tirana", whoami: "about you", clear: "clear the screen", exit: "close the terminal" },
         about: "Hi! I'm <span class='acc'>Albsoldier</span>, a web developer from Albania 🇦🇱\nI build fast, friendly websites with clean front-ends,\nsmooth ordering flows and back-ends that just work.",
         projectsHead: "Projects (type <b class='ok'>open 1</b> to view one):",
@@ -2119,7 +2429,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         welcome: "Mirë se erdhe në <span class='acc'>albsoldier.dev</span> 🚀  Shkruaj <b class='ok'>help</b> për të parë çfarë mund të bësh.",
         tip: "Këshillë: ↑ ↓ për historikun, Tab për plotësim, Esc për ta mbyllur.",
         help: { help: "shfaq këtë listë", about: "kush jam unë", projects: "lista e projekteve", "open <n>": "hap një projekt", skills: "me çfarë punoj",
-          contact: "si të më kontaktosh", theme: "light, dark ose space", lang: "en ose sq", gravity: "fik gravitetin", comet: "ndiz/fik kometën e miut", xmas: "ndiz/fik Krishtlindjet", snow: "le të bjerë borë", coffee: "bëj një pushim",
+          contact: "si të më kontaktosh", theme: "light, dark ose space", lang: "en ose sq", gravity: "fik gravitetin", trophies: "arritjet e tua", flag: "Dita e Flamurit", comet: "ndiz/fik kometën e miut", xmas: "ndiz/fik Krishtlindjet", snow: "le të bjerë borë", coffee: "bëj një pushim",
           rocket: "lësho një raketë", ls: "listo skedarët", "cat <file>": "lexo një skedar", date: "ora në Tiranë", whoami: "rreth teje", clear: "pastro ekranin", exit: "mbyll terminalin" },
         about: "Përshëndetje! Jam <span class='acc'>Albsoldier</span>, zhvillues web nga Shqipëria 🇦🇱\nNdërtoj faqe interneti të shpejta dhe miqësore, me ndërfaqe të pastra,\nporosi të thjeshta online dhe back-end që thjesht funksionon.",
         projectsHead: "Projektet (shkruaj <b class='ok'>open 1</b> për të parë njërin):",
@@ -2144,7 +2454,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     function open() {
       if (term.classList.contains("open") || zeroG || document.body.classList.contains("locked")) return;
       lastFocus = document.activeElement;
-      term.classList.add("open"); back.classList.add("open"); document.body.classList.add("term-open", "locked");
+      term.classList.add("open"); back.classList.add("open"); document.body.classList.add("term-open", "locked"); unlock("terminal");
       if (!booted) { booted = true; line(tt("welcome")); line(tt("tip"), "dim"); line(); }
       setTimeout(() => input.focus(), 50);
     }
@@ -2154,7 +2464,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
     }
 
-    const COMMANDS = ["comet", "xmas", "snow", "help", "about", "projects", "open", "skills", "contact", "theme", "lang", "gravity", "coffee", "rocket", "ls", "cat", "date", "whoami", "echo", "clear", "exit", "sudo", "hire"];
+    const COMMANDS = ["trophies", "achievements", "flag", "comet", "xmas", "snow", "help", "about", "projects", "open", "skills", "contact", "theme", "lang", "gravity", "coffee", "rocket", "ls", "cat", "date", "whoami", "echo", "clear", "exit", "sudo", "hire"];
 
     async function run(raw) {
       const cmdline = raw.trim();
@@ -2190,6 +2500,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
           line(tt("hire"), "ok"); await sleep(900); close();
           document.querySelector("#contact").scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); break;
         case "sudo":
+          unlock("sudo");
           if (/^hire(-me)?$/i.test(arg)) { line(tt("hire"), "ok"); await sleep(900); close(); document.querySelector("#contact").scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }
           else if (/^rm\b/.test(arg)) { line(tt("rm"), "err"); shake(); }
           else line(tt("sudo"), "err");
@@ -2229,6 +2540,17 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         case "date":
           line(`${tt("tirana")} <span class="acc">${new Date().toLocaleString(L() === "sq" ? "sq-AL" : "en-GB", { timeZone: "Europe/Tirane", weekday: "long", hour: "2-digit", minute: "2-digit", day: "numeric", month: "long" })}</span>`); break;
         case "whoami": line(tt("whoami")); break;
+        case "trophies": case "achievements": case "arritjet": {
+          const have = achApi.list(), sq = L() === "sq";
+          line(`🏆 <span class="acc">${have.length}/${ACH.length}</span>`);
+          ACH.forEach(a => { const ok = have.includes(a.id); line(`  ${ok ? a.em : "🔒"} ${ok ? esc((sq ? a.sq : a.en)[0]) : '<span class="dim">??? · ' + esc(a.hint[sq ? 1 : 0]) + "</span>"}`); });
+          break;
+        }
+        case "flag": case "28": case "flamuri": {
+          const on = flagApi.toggle();
+          line(on ? "🦅 " + (L() === "sq" ? "Gëzuar 28 Nëntorin! Rroftë Shqipëria!" : "Happy Independence Day, Albania!") : t("flagOff"), on ? "ok" : "dim");
+          break;
+        }
         case "comet": case "kometa": {
           const on = cometApi.toggle();
           line(on ? (L() === "sq" ? "☄️ Kometa u ndez. Lëviz miun!" : "☄️ Comet trail on. Move your mouse!") : (L() === "sq" ? "Kometa u fik." : "Comet trail off."), on ? "ok" : "dim");
