@@ -1970,9 +1970,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
   // ================= Save my contact (vCard + QR) =================
   (function () {
-    const CONTACT = { name: "Albsoldier", title: "Web Developer", org: "albsoldier.dev", email: "jurgen.kapllani@hotmail.com", tel: "+355695289141", url: "https://albsoldier.github.io" };
+    const CONTACT = { first: "Jurgen", last: "Web", name: "Jurgen Web", title: "Web Developer", org: "albsoldier.dev", email: "jurgen.kapllani@hotmail.com", tel: "+355695289141", url: "https://albsoldier.github.io" };
     function vcard(photo) {
-      const lines = ["BEGIN:VCARD", "VERSION:3.0", `N:;${CONTACT.name};;;`, `FN:${CONTACT.name}`, `ORG:${CONTACT.org}`, `TITLE:${CONTACT.title}`,
+      const lines = ["BEGIN:VCARD", "VERSION:3.0", `N:${CONTACT.last};${CONTACT.first};;;`, `FN:${CONTACT.name}`, `ORG:${CONTACT.org}`, `TITLE:${CONTACT.title}`,
         `TEL;TYPE=CELL:${CONTACT.tel}`, `EMAIL;TYPE=INTERNET:${CONTACT.email}`, `URL:${CONTACT.url}`];
       if (photo) lines.push("PHOTO;ENCODING=b;TYPE=JPEG:" + photo);
       lines.push("END:VCARD");
