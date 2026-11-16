@@ -535,6 +535,51 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   .zero-g .totop { display: none; }
   .zero-g .toast { bottom: 86px; }
 
+  /* ================= Terminal ================= */
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .term-link { background: none; border: 1px dashed var(--border); color: var(--muted); border-radius: 8px; padding: 4px 10px; font-size: 13px; cursor: pointer; transition: color .2s, border-color .2s; }
+  .term-link:hover { color: var(--accent); border-color: var(--accent); }
+  .term-backdrop { position: fixed; inset: 0; z-index: 97; background: rgba(5,4,12,.45); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .term-backdrop.open { opacity: 1; pointer-events: auto; }
+  .term {
+    --t-bg: #0e0d16; --t-fg: #e7e4f2; --t-dim: #8d88a8; --t-acc: #fb923c; --t-ok: #4ade80; --t-err: #f87171; --t-link: #93c5fd;
+    position: fixed; z-index: 98; left: 50%; top: 72px; width: min(860px, calc(100vw - 32px)); height: min(500px, calc(100dvh - 100px));
+    display: flex; flex-direction: column; background: color-mix(in srgb, var(--t-bg) 94%, transparent); color: var(--t-fg);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 16px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.55);
+    transform: translate(-50%, -30px) scale(.97); opacity: 0; visibility: hidden;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .25s, visibility 0s .35s;
+  }
+  [data-theme="space"] .term { --t-acc: #c4b5fd; }
+  .term.open { transform: translate(-50%, 0) scale(1); opacity: 1; visibility: visible; transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .25s; }
+  .term::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px); }
+  .term.shake { animation: shake .45s; }
+  @keyframes shake { 20%, 60% { transform: translate(calc(-50% - 8px), 0); } 40%, 80% { transform: translate(calc(-50% + 8px), 0); } }
+  .term-bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: rgba(255,255,255,.05); border-bottom: 1px solid rgba(255,255,255,.08); }
+  .term-bar .dots { display: flex; gap: 7px; }
+  .term-bar .dots i { width: 12px; height: 12px; border-radius: 50%; background: #f87171; }
+  .term-bar .dots i:nth-child(2) { background: #fbbf24; } .term-bar .dots i:nth-child(3) { background: #4ade80; }
+  .term-title { flex: 1; text-align: center; font-size: 13px; color: var(--t-dim); }
+  .term-x { background: none; border: 0; color: var(--t-dim); font-size: 16px; cursor: pointer; width: 28px; height: 28px; border-radius: 8px; }
+  .term-x:hover { background: rgba(255,255,255,.08); color: var(--t-fg); }
+  .term-body { flex: 1; overflow-y: auto; padding: 14px 16px 4px; font-size: 14px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .term-body .ln { min-height: 1.55em; }
+  .term-body .cmd b { color: var(--t-ok); font-weight: 500; } .term-body .cmd span { color: var(--t-link); }
+  .term-body .acc { color: var(--t-acc); } .term-body .dim { color: var(--t-dim); } .term-body .ok { color: var(--t-ok); } .term-body .err { color: var(--t-err); }
+  .term-body a { color: var(--t-link); text-decoration: underline; text-underline-offset: 3px; }
+  .term-body .art { color: var(--t-acc); line-height: 1.2; white-space: pre; overflow-x: auto; }
+  .term-body .grid2 { display: grid; grid-template-columns: max-content 1fr; gap: 2px 18px; }
+  .term-line { display: flex; align-items: center; gap: 8px; padding: 8px 16px 14px; font-size: 14px; }
+  .term-line .prompt { white-space: nowrap; color: var(--t-link); }
+  .term-line .prompt b { color: var(--t-ok); font-weight: 500; }
+  .term-line input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--t-fg); font: inherit; caret-color: var(--t-acc); padding: 4px 0; }
+  @media (max-width: 720px) {
+    .term { top: 12px; height: min(520px, calc(100dvh - 24px)); }
+    .term-body, .term-line { font-size: 13px; }
+    .term-line .prompt b { display: none; }
+  }
+
   /* ================= Space mode ================= */
   :root[data-theme="space"] {
     color-scheme: dark;
@@ -801,13 +846,27 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg>
 </button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="term-backdrop" id="termBackdrop"></div>
+<div class="term" id="term" role="dialog" aria-modal="true" aria-label="Terminal">
+  <div class="term-bar">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="term-title mono">visitor@albsoldier: ~</span>
+    <button class="term-x" id="termClose" aria-label="Close terminal">✕</button>
+  </div>
+  <div class="term-body mono" id="termBody" aria-live="polite"></div>
+  <form class="term-line mono" id="termForm" autocomplete="off">
+    <label for="termInput" class="prompt"><b>visitor@albsoldier</b>:<span>~</span>$</label>
+    <input id="termInput" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="send" aria-label="Type a command">
+  </form>
+</div>
 <button class="zerog-btn" id="zerogBtn" aria-label="Turn on zero gravity" title="Zero gravity" data-i18n-aria="a.zerog">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="10.5" ry="3.5" transform="rotate(-20 12 12)"/><circle cx="20" cy="5" r="1" fill="currentColor"/></svg>
 </button>
 <button class="zg-restore" id="zgRestore"><span aria-hidden="true">🌍</span><span data-i18n="zg.restore">Restore gravity</span></button>
 
 <footer>
-  <div class="wrap">© <span id="year"></span> Albsoldier</div>
+  <div class="wrap foot"><span>© <span id="year"></span> Albsoldier</span>
+    <button class="term-link mono" id="termLink" aria-haspopup="dialog" aria-controls="term"><span aria-hidden="true">&gt;_</span> <span data-i18n="term.link">terminal</span></button></div>
 </footer>
 
 <!-- The opened folder -->
@@ -951,7 +1010,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     "a.theme": "Ndrysho temën (e ndritshme, e errët, hapësirë)", "a.avatar": "Përshëndet astronautin", "a.tech": "Teknologjitë që përdor",
     "a.top": "Kthehu në krye", "a.closeF": "Mbyll dosjen", "a.closeP": "Mbyll projektin",
     "a.copyE": "Kopjo adresën e email-it", "a.copyP": "Kopjo numrin e telefonit", "a.lang": "Ndrysho gjuhën: anglisht / shqip",
-    "zg.restore": "Rikthe gravitetin", "a.zerog": "Aktivizo zero gravitetin"
+    "zg.restore": "Rikthe gravitetin", "term.link": "terminali", "a.zerog": "Aktivizo zero gravitetin"
   };
   // Text set from JavaScript
   const T = {
@@ -1024,30 +1083,31 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   const root = document.documentElement;
   try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch {}
   const THEMES = ["light", "dark", "space"];
-  $("themeBtn").onclick = () => {
-    const cur = root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
-    const r = $("themeBtn").getBoundingClientRect();
+  const curTheme = () => root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  function sweepFrom(el) {
+    const r = el.getBoundingClientRect();
     root.style.setProperty("--tx", (r.left + r.width / 2) + "px");
     root.style.setProperty("--ty", (r.top + r.height / 2) + "px");
+  }
+  function setTheme(next, from) {
+    sweepFrom(from || $("themeBtn"));
     const apply = () => { root.dataset.theme = next; };
     if (document.startViewTransition && !reduce) document.startViewTransition(apply); else apply();
     try { localStorage.setItem("theme", next); } catch {}
     toast(t("themes")[next]);
-  };
+  }
+  $("themeBtn").onclick = () => setTheme(THEMES[(THEMES.indexOf(curTheme()) + 1) % THEMES.length]);
 
   // Language toggle
   applyLang();
-  $("langBtn").onclick = () => {
-    const next = L() === "sq" ? "en" : "sq";
-    const r = $("langBtn").getBoundingClientRect();
-    root.style.setProperty("--tx", (r.left + r.width / 2) + "px");
-    root.style.setProperty("--ty", (r.top + r.height / 2) + "px");
+  function setLang(next, from) {
+    sweepFrom(from || $("langBtn"));
     const apply = () => { root.lang = next; applyLang(); };
     if (document.startViewTransition && !reduce) document.startViewTransition(apply); else apply();
     try { localStorage.setItem("lang", next); } catch {}
     toast(T[next].switched);
-  };
+  }
+  $("langBtn").onclick = () => setLang(L() === "sq" ? "en" : "sq");
 
   // Space mode star field (drawn once with box-shadows)
   [["st1", 160], ["st2", 70], ["st3", 22]].forEach(([id, n]) => {
@@ -1355,7 +1415,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
 
   // ================= Zero gravity =================
-  let zeroG = false;
+  let zeroG = false, zeroGStart = () => {};
   document.querySelectorAll(".in").forEach(el => el.addEventListener("animationend", () => el.classList.add("settled"), { once: true }));
   (function () {
     const SEL = ".logo, .eyebrow, h1, .lead, .btns .btn, .stat, .avatar-wrap, section h2, section .sub, .hint, .folder, .skill-box, .step, #about p, .contact-card > p, .contact-item, footer .wrap";
@@ -1454,6 +1514,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     document.addEventListener("click", e => { if (zeroG && e.target.closest("[data-zg]")) { e.preventDefault(); e.stopPropagation(); } }, true);
 
     $("zerogBtn").addEventListener("click", start);
+    zeroGStart = start;
     $("zgRestore").addEventListener("click", stop);
     addEventListener("keydown", e => { if (e.key === "Escape" && zeroG) { e.stopImmediatePropagation(); stop(); } }, true);
     // secret word: type "gravity" (or "graviteti")
@@ -1464,6 +1525,187 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       if (/gravit(y|eti)$/.test(typed)) { typed = ""; zeroG ? stop() : start(); }
     });
     addEventListener("resize", () => { if (zeroG) stop(); });
+  })();
+
+  // ================= Secret terminal =================
+  (function () {
+    const term = $("term"), body = $("termBody"), input = $("termInput"), back = $("termBackdrop");
+    const TT = {
+      en: {
+        welcome: "Welcome to <span class='acc'>albsoldier.dev</span> 🚀  Type <b class='ok'>help</b> to see what you can do.",
+        tip: "Tip: ↑ ↓ for history, Tab to autocomplete, Esc to close.",
+        help: { help: "show this list", about: "who I am", projects: "list my projects", "open <n>": "open a project", skills: "what I work with",
+          contact: "how to reach me", theme: "light, dark or space", lang: "en or sq", gravity: "turn off gravity", coffee: "take a break",
+          rocket: "launch a rocket", ls: "list files", "cat <file>": "read a file", date: "time in Tirana", whoami: "about you", clear: "clear the screen", exit: "close the terminal" },
+        about: "Hi! I'm <span class='acc'>Albsoldier</span>, a web developer from Albania 🇦🇱\nI build fast, friendly websites with clean front-ends,\nsmooth ordering flows and back-ends that just work.",
+        projectsHead: "Projects (type <b class='ok'>open 1</b> to view one):",
+        opening: "Opening", noProject: "No project with that number. Try <b class='ok'>projects</b>.",
+        contact: "Email", phone: "Phone", hire: "Permission granted ✅ Taking you to the contact section…",
+        sudo: "Nice try 😏 visitor is not in the sudoers file. This incident will be reported.",
+        rm: "🙅 Whoa there! Not on my watch.", notFound: "command not found:", tryHelp: "Type <b class='ok'>help</b> for a list of commands.",
+        themeUsage: "Usage: theme light | dark | space", langUsage: "Usage: lang en | sq", themeSet: "Theme set to", langSet: "Language set to",
+        brewing: "Brewing a fresh cup… ☕", served: "Here you go! Now back to work 😄",
+        liftoff: "🚀 Liftoff! We have liftoff!", gravity: "Turning off gravity… 🪐",
+        whoami: "visitor (a very curious one 🕵️)", tirana: "Time in Tirana:", noFile: "No such file:",
+        files: { "about.txt": "about", "skills.txt": "skills", "contact.txt": "contact", "secret.txt": "Psst… type <b class='ok'>gravity</b> anywhere on the page, or switch to space mode and look bottom-left 🪐" },
+        bye: "Goodbye 👋"
+      },
+      sq: {
+        welcome: "Mirë se erdhe në <span class='acc'>albsoldier.dev</span> 🚀  Shkruaj <b class='ok'>help</b> për të parë çfarë mund të bësh.",
+        tip: "Këshillë: ↑ ↓ për historikun, Tab për plotësim, Esc për ta mbyllur.",
+        help: { help: "shfaq këtë listë", about: "kush jam unë", projects: "lista e projekteve", "open <n>": "hap një projekt", skills: "me çfarë punoj",
+          contact: "si të më kontaktosh", theme: "light, dark ose space", lang: "en ose sq", gravity: "fik gravitetin", coffee: "bëj një pushim",
+          rocket: "lësho një raketë", ls: "listo skedarët", "cat <file>": "lexo një skedar", date: "ora në Tiranë", whoami: "rreth teje", clear: "pastro ekranin", exit: "mbyll terminalin" },
+        about: "Përshëndetje! Jam <span class='acc'>Albsoldier</span>, zhvillues web nga Shqipëria 🇦🇱\nNdërtoj faqe interneti të shpejta dhe miqësore, me ndërfaqe të pastra,\nporosi të thjeshta online dhe back-end që thjesht funksionon.",
+        projectsHead: "Projektet (shkruaj <b class='ok'>open 1</b> për të parë njërin):",
+        opening: "Po hapet", noProject: "Nuk ka projekt me këtë numër. Provo <b class='ok'>projects</b>.",
+        contact: "Email", phone: "Telefon", hire: "Leja u dha ✅ Po të çoj te seksioni i kontaktit…",
+        sudo: "Përpjekje e mirë 😏 vizitori nuk është në listën sudoers. Ky incident do të raportohet.",
+        rm: "🙅 Ndal! Jo nën mbikëqyrjen time.", notFound: "komanda nuk u gjet:", tryHelp: "Shkruaj <b class='ok'>help</b> për listën e komandave.",
+        themeUsage: "Përdorimi: theme light | dark | space", langUsage: "Përdorimi: lang en | sq", themeSet: "Tema u ndryshua në", langSet: "Gjuha u ndryshua në",
+        brewing: "Po përgatitet një kafe e freskët… ☕", served: "Urdhëro! Tani përsëri në punë 😄",
+        liftoff: "🚀 Nisja! Raketa u nis!", gravity: "Po fiket graviteti… 🪐",
+        whoami: "vizitor (shumë kurioz 🕵️)", tirana: "Ora në Tiranë:", noFile: "Skedari nuk ekziston:",
+        files: { "about.txt": "about", "skills.txt": "skills", "contact.txt": "contact", "secret.txt": "Psst… shkruaj <b class='ok'>graviteti</b> kudo në faqe, ose kalo në temën space dhe shiko poshtë majtas 🪐" },
+        bye: "Mirupafshim 👋"
+      }
+    };
+    const tt = k => TT[L()][k];
+    const history = []; let hi = 0, lastFocus = null, booted = false;
+
+    function line(html = "", cls = "") { const d = document.createElement("div"); d.className = "ln " + cls; d.innerHTML = html; body.appendChild(d); body.scrollTop = body.scrollHeight; return d; }
+    const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+
+    function open() {
+      if (term.classList.contains("open") || zeroG || document.body.classList.contains("locked")) return;
+      lastFocus = document.activeElement;
+      term.classList.add("open"); back.classList.add("open"); document.body.classList.add("term-open", "locked");
+      if (!booted) { booted = true; line(tt("welcome")); line(tt("tip"), "dim"); line(); }
+      setTimeout(() => input.focus(), 50);
+    }
+    function close() {
+      if (!term.classList.contains("open")) return;
+      term.classList.remove("open"); back.classList.remove("open"); document.body.classList.remove("term-open", "locked");
+      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    }
+
+    const COMMANDS = ["help", "about", "projects", "open", "skills", "contact", "theme", "lang", "gravity", "coffee", "rocket", "ls", "cat", "date", "whoami", "echo", "clear", "exit", "sudo", "hire"];
+
+    async function run(raw) {
+      const cmdline = raw.trim();
+      line(`<span class="cmd"><b>visitor@albsoldier</b>:<span>~</span>$</span> ${esc(cmdline)}`);
+      if (!cmdline) return;
+      history.push(cmdline); hi = history.length;
+      const [cmd, ...args] = cmdline.split(/\s+/); const arg = args.join(" ");
+      switch (cmd.toLowerCase()) {
+        case "help": {
+          const h = tt("help");
+          line(`<div class="grid2">${Object.entries(h).map(([k, v]) => `<b class="ok">${esc(k)}</b><span class="dim">${esc(v)}</span>`).join("")}</div>`);
+          break;
+        }
+        case "about": line(tt("about")); break;
+        case "projects": case "ls-projects":
+          line(tt("projectsHead"));
+          PROJECTS.forEach((p, i) => line(`  <span class="acc">[${i + 1}]</span> ${esc(p.title)} <span class="dim">· ${esc(P(p, "type"))}</span>`));
+          break;
+        case "open": {
+          const n = parseInt(arg, 10) - 1, p = PROJECTS[n];
+          if (!p) { line(tt("noProject"), "err"); break; }
+          line(`${tt("opening")} <span class="acc">${esc(p.title)}</span>…`, "ok");
+          await sleep(500); close();
+          document.querySelector("#work").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+          await sleep(600); openWork();
+          await sleep(1100);
+          const card = document.querySelector(`.proj[data-i="${n}"]`); if (card) openDetail(n, card);
+          break;
+        }
+        case "skills": printSkills(); break;
+        case "contact": printContact(); break;
+        case "hire":
+          line(tt("hire"), "ok"); await sleep(900); close();
+          document.querySelector("#contact").scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); break;
+        case "sudo":
+          if (/^hire(-me)?$/i.test(arg)) { line(tt("hire"), "ok"); await sleep(900); close(); document.querySelector("#contact").scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }
+          else if (/^rm\b/.test(arg)) { line(tt("rm"), "err"); shake(); }
+          else line(tt("sudo"), "err");
+          break;
+        case "rm":
+          if (/-rf?\s*\/?/.test(arg)) { line(tt("rm"), "err"); shake(); } else line(`rm: ${esc(arg || "?")}: Permission denied`, "err");
+          break;
+        case "theme": {
+          const v = arg.toLowerCase() || THEMES[(THEMES.indexOf(curTheme()) + 1) % THEMES.length];
+          if (!THEMES.includes(v)) { line(tt("themeUsage"), "err"); break; }
+          setTheme(v, $("termInput")); line(`${tt("themeSet")} <span class="acc">${v}</span> ✓`, "ok"); break;
+        }
+        case "lang": {
+          const v = arg.toLowerCase() || (L() === "sq" ? "en" : "sq");
+          if (!["en", "sq"].includes(v)) { line(tt("langUsage"), "err"); break; }
+          setLang(v, $("termInput")); line(`${TT[v].langSet} <span class="acc">${v === "sq" ? "shqip 🇦🇱" : "English 🇬🇧"}</span> ✓`, "ok"); break;
+        }
+        case "gravity": case "graviteti":
+          line(tt("gravity"), "acc"); await sleep(700); close(); await sleep(300); zeroGStart(); break;
+        case "coffee": case "kafe":
+          line(tt("brewing"), "dim"); await sleep(700);
+          line("    ( (\n     ) )\n  ........\n  |      |]\n  \\      /\n   `----'", "art"); line(tt("served"), "ok"); break;
+        case "rocket": case "launch": {
+          const art = "     /\\\n    /  \\\n   |    |\n   | AL |\n   |    |\n  /|/\\/\\|\\\n    ****\n     **";
+          const el = line(art, "art");
+          el.style.transition = "transform .09s linear, opacity .09s linear";
+          for (let k = 1; k <= 12; k++) { await sleep(90); el.style.transform = `translateY(${-k * k * 2}px)`; el.style.opacity = 1 - k / 12; }
+          el.remove(); line(tt("liftoff"), "ok"); break;
+        }
+        case "ls": line(Object.keys(tt("files")).map(f => `<span class="${f === "secret.txt" ? "acc" : ""}">${f}</span>`).join("   ")); break;
+        case "cat": {
+          const f = tt("files")[arg];
+          if (!f) { line(`${tt("noFile")} ${esc(arg || "?")}`, "err"); break; }
+          if (f === "about") line(tt("about")); else if (f === "skills") printSkills(); else if (f === "contact") printContact(); else line(f);
+          break;
+        }
+        case "date":
+          line(`${tt("tirana")} <span class="acc">${new Date().toLocaleString(L() === "sq" ? "sq-AL" : "en-GB", { timeZone: "Europe/Tirane", weekday: "long", hour: "2-digit", minute: "2-digit", day: "numeric", month: "long" })}</span>`); break;
+        case "whoami": line(tt("whoami")); break;
+        case "echo": line(esc(arg)); break;
+        case "clear": body.innerHTML = ""; break;
+        case "exit": case "quit": line(tt("bye"), "dim"); await sleep(400); close(); break;
+        default: line(`${tt("notFound")} ${esc(cmd)}`, "err"); line(tt("tryHelp"), "dim");
+      }
+    }
+    function printSkills() {
+      document.querySelectorAll(".skill-box").forEach(b => {
+        line(`<span class="acc">${esc(b.querySelector("h3").textContent)}</span>`);
+        b.querySelectorAll("li").forEach(li => line(`  • ${esc(li.textContent)}`));
+      });
+    }
+    function printContact() {
+      line(`<div class="grid2"><span class="dim">${tt("contact")}</span><a href="mailto:jurgen.kapllani@hotmail.com">jurgen.kapllani@hotmail.com</a><span class="dim">${tt("phone")}</span><a href="tel:+355695289141">+355 69 528 9141</a></div>`);
+    }
+    function shake() { term.classList.remove("shake"); void term.offsetWidth; term.classList.add("shake"); }
+
+    $("termForm").addEventListener("submit", e => { e.preventDefault(); const v = input.value; input.value = ""; run(v); });
+    input.addEventListener("keydown", e => {
+      if (e.key === "ArrowUp") { if (hi > 0) { hi--; input.value = history[hi]; } e.preventDefault(); }
+      else if (e.key === "ArrowDown") { if (hi < history.length) { hi++; input.value = history[hi] || ""; } e.preventDefault(); }
+      else if (e.key === "Tab") {
+        e.preventDefault();
+        const v = input.value.trim().toLowerCase(); if (!v) return;
+        const m = COMMANDS.filter(c => c.startsWith(v));
+        if (m.length === 1) input.value = m[0] + " ";
+        else if (m.length > 1) line(m.join("   "), "dim");
+      }
+      else if ((e.key === "`" || e.key === "~") && !input.value) { e.preventDefault(); close(); }
+      e.stopPropagation();
+    });
+    body.addEventListener("click", () => { if (!getSelection().toString()) input.focus(); });
+    $("termClose").addEventListener("click", close);
+    back.addEventListener("click", close);
+    $("termLink").addEventListener("click", open);
+    addEventListener("keydown", e => {
+      if (e.key === "Escape" && term.classList.contains("open")) { e.stopImmediatePropagation(); close(); return; }
+      if ((e.key === "`" || e.key === "~") && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        if (document.body.classList.contains("locked") && !term.classList.contains("open")) return;
+        e.preventDefault(); term.classList.contains("open") ? close() : open();
+      }
+    }, true);
   })();
 
   addEventListener("keydown", e => {
