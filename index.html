@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Albsoldier · Web Developer</title>
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:title" content="Albsoldier · Web Developer">
@@ -497,6 +498,75 @@
     .bubble { left: 60%; }
   }
 
+
+  /* ================= Space mode ================= */
+  :root[data-theme="space"] {
+    color-scheme: dark;
+    --bg: #0b0a1a; --surface: #16132d; --text: #eeeaff; --muted: #a8a2cf; --border: #2b2652;
+    --accent: #a78bfa; --accent-2: #f0abfc; --accent-soft: #2a2150;
+    --folder: #8b5cf6; --folder-dark: #6d28d9; --paper: #221e3d;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.5);
+    --overlay: rgba(5,4,15,.72);
+    --dot: transparent; --doodle: #c4b5fd; --doodle-op: .12;
+    --glow1: rgba(139,92,246,.22); --glow2: rgba(236,72,153,.13);
+  }
+  html[data-theme="space"] body { background: radial-gradient(ellipse at 50% -20%, #1d1640 0%, var(--bg) 60%) fixed, var(--bg); }
+  [data-theme="space"] .btn.primary, [data-theme="space"] .totop, [data-theme="space"] .step.lit .num { color: #150d2e; }
+  [data-theme="space"] .blob.b1 { background: #7c3aed; opacity: .28; }
+  [data-theme="space"] .blob.b2 { background: #db2777; opacity: .18; }
+  [data-theme="space"] .contact-card {
+    background: radial-gradient(circle at 12% 18%, rgba(240,171,252,.45), transparent 42%),
+                radial-gradient(circle at 88% 85%, rgba(30,10,80,.6), transparent 48%),
+                linear-gradient(135deg, #5b21b6, #a21caf);
+    box-shadow: 0 20px 50px rgba(124,58,237,.35);
+  }
+  [data-theme="space"] .contact-item .ic, [data-theme="space"] .copy-btn.done { color: #6d28d9; }
+  [data-theme="space"] .work-overlay { background: radial-gradient(circle at 85% 0%, rgba(139,92,246,.25), transparent 45%), var(--bg); }
+  [data-theme="space"] nav { background: color-mix(in srgb, #0b0a1a 75%, transparent); }
+
+  .space { position: absolute; inset: 0; opacity: 0; transition: opacity .8s; }
+  [data-theme="space"] .space { opacity: 1; }
+  [data-theme="space"] .site-bg .dots { opacity: 0; }
+  .nebula { position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 35% at 20% 30%, rgba(124,58,237,.22), transparent 70%),
+                radial-gradient(ellipse 40% 30% at 80% 70%, rgba(219,39,119,.14), transparent 70%),
+                radial-gradient(ellipse 35% 25% at 60% 15%, rgba(56,189,248,.10), transparent 70%); }
+  .stars-css { position: absolute; left: 0; top: 0; width: 1px; height: 1px; border-radius: 50%; background: transparent; }
+  .stars-css.s1 { animation: twinkle 4s ease-in-out infinite alternate; }
+  .stars-css.s2 { width: 2px; height: 2px; animation: twinkle 6s ease-in-out -2s infinite alternate; }
+  .stars-css.s3 { width: 3px; height: 3px; animation: twinkle 8s ease-in-out -4s infinite alternate; }
+  @keyframes twinkle { from { opacity: .35; } to { opacity: 1; } }
+  .shoot { position: absolute; top: 0; left: 0; width: 140px; height: 2px; border-radius: 2px; opacity: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,.95), transparent); transform-origin: 0 50%; }
+  [data-theme="space"] .shoot { animation: shoot 9s ease-in infinite; }
+  .shoot.k2 { animation-delay: -4.5s !important; animation-duration: 13s !important; }
+  @keyframes shoot {
+    0%, 82% { opacity: 0; transform: translate(var(--sx), var(--sy)) rotate(155deg) translateX(0); }
+    84% { opacity: 1; }
+    92%, 100% { opacity: 0; transform: translate(var(--sx), var(--sy)) rotate(155deg) translateX(45vmax); }
+  }
+  .shoot.k1 { --sx: 88vw; --sy: 8vh; }
+  .shoot.k2 { --sx: 60vw; --sy: 3vh; }
+  .planet { position: absolute; right: 5%; top: 56%; width: 104px; height: 104px; border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, #f5d0fe, #c084fc 35%, #6d28d9 70%, #2e1065);
+    box-shadow: inset -14px -10px 28px rgba(20,8,60,.7), 0 0 60px rgba(167,139,250,.35); will-change: transform; }
+  .planet::after { content: ""; position: absolute; left: -38%; top: 38%; width: 176%; height: 26%; border-radius: 50%;
+    border: 3px solid rgba(240,171,252,.55); border-top-color: transparent; transform: rotate(-18deg); }
+  .moon { position: absolute; left: 6%; top: 70%; width: 34px; height: 34px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #e9e5ff, #8b86b8 70%); box-shadow: inset -5px -4px 8px rgba(0,0,0,.35); opacity: .7; will-change: transform; }
+  @media (max-width: 720px) { .planet { width: 64px; height: 64px; right: -14px; top: 12%; } .moon { display: none; } }
+
+  /* theme button icons */
+  .theme-btn .i-sun, .theme-btn .i-moon, .theme-btn .i-space { display: none; }
+  :root[data-theme="light"] .theme-btn .i-sun, :root[data-theme="dark"] .theme-btn .i-moon, :root[data-theme="space"] .theme-btn .i-space { display: block; }
+  :root:not([data-theme]) .theme-btn .i-sun { display: block; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme]) .theme-btn .i-sun { display: none; } :root:not([data-theme]) .theme-btn .i-moon { display: block; } }
+
+  /* circular reveal when switching themes */
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-new(root) { animation: reveal .8s cubic-bezier(.7,0,.2,1); }
+  @keyframes reveal { from { clip-path: circle(0 at var(--tx, 90%) var(--ty, 30px)); } to { clip-path: circle(150vmax at var(--tx, 90%) var(--ty, 30px)); } }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
     .blob { display: none; }
@@ -513,6 +583,13 @@
 <div class="site-bg" aria-hidden="true">
   <div class="glow g1"></div><div class="glow g2"></div>
   <div class="dots"></div>
+  <div class="space" id="space">
+    <div class="nebula"></div>
+    <div class="stars-css s1" id="st1"></div><div class="stars-css s2" id="st2"></div><div class="stars-css s3" id="st3"></div>
+    <span class="shoot k1"></span><span class="shoot k2"></span>
+    <div class="planet" data-speed="0.06"></div>
+    <div class="moon" data-speed="0.14"></div>
+  </div>
   <div class="doodles" id="doodles">
     <!-- dashed flight path with a little plane -->
     <svg class="flight hide-sm" viewBox="0 0 1440 900" preserveAspectRatio="none" data-speed="0.04" style="stroke-dasharray:7 11;stroke-width:1.6"><path d="M-20 760 C 260 620, 380 820, 640 640 S 1060 330, 1460 260"/></svg>
@@ -544,8 +621,10 @@
       <li class="hide-sm"><a href="#process">Process</a></li>
       <li class="hide-sm"><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <li><button class="theme-btn" id="themeBtn" aria-label="Switch theme (light, dark, space)" title="Switch theme">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-space" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="10.5" ry="3.5" transform="rotate(-20 12 12)"/></svg>
       </button></li>
     </ul>
   </div>
@@ -804,11 +883,29 @@
   // Theme toggle
   const root = document.documentElement;
   try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch {}
+  const THEMES = ["light", "dark", "space"];
+  const THEME_MSG = { light: "☀️ Light mode", dark: "🌙 Dark mode", space: "🚀 Space mode, welcome aboard!" };
   $("themeBtn").onclick = () => {
-    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-    root.dataset.theme = dark ? "light" : "dark";
-    try { localStorage.setItem("theme", root.dataset.theme); } catch {}
+    const cur = root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
+    const r = $("themeBtn").getBoundingClientRect();
+    root.style.setProperty("--tx", (r.left + r.width / 2) + "px");
+    root.style.setProperty("--ty", (r.top + r.height / 2) + "px");
+    const apply = () => { root.dataset.theme = next; };
+    if (document.startViewTransition && !reduce) document.startViewTransition(apply); else apply();
+    try { localStorage.setItem("theme", next); } catch {}
+    toast(THEME_MSG[next]);
   };
+
+  // Space mode star field (drawn once with box-shadows)
+  [["st1", 160], ["st2", 70], ["st3", 22]].forEach(([id, n]) => {
+    const sh = [];
+    for (let k = 0; k < n; k++) {
+      const c = Math.random() < .15 ? "#f0abfc" : Math.random() < .2 ? "#bae6fd" : "#fff";
+      sh.push(`${(Math.random() * 100).toFixed(2)}vw ${(Math.random() * 100).toFixed(2)}vh ${c}`);
+    }
+    $(id).style.boxShadow = sh.join(",");
+  });
 
   // Scroll reveal
   const io = new IntersectionObserver(es => es.forEach(e => {
@@ -892,7 +989,7 @@
 
   // Background doodles drift at different speeds as you scroll
   if (!reduce) {
-    const ds = [...document.querySelectorAll("#doodles [data-speed]")];
+    const ds = [...document.querySelectorAll("#doodles [data-speed], #space [data-speed]")];
     ds.forEach(el => el.dataset.base = el.style.transform || "");
     let ticking = false;
     const move = () => {
