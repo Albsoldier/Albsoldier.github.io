@@ -673,6 +673,56 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   @media (max-width: 720px) { .sleigh { font-size: 26px; top: 14vh; } }
   @media (prefers-reduced-motion: reduce) { .xmas .sleigh.fly { display: none; } }
 
+  /* ================= Snow on the page edges ================= */
+  :root { --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 16' preserveAspectRatio='none'%3E%3Cpath d='M0 16V9c8-6 14-7 22-3s14 4 20-1 14-6 22-1 12 6 20 2 12-7 20-4 14 6 22 3 12-6 20-4 14 5 14 5v10z' fill='white'/%3E%3C/svg%3E"); }
+  /* snow resting on every section border, the tech strip and the footer */
+  .xmas section, .xmas footer { position: relative; }
+  .xmas section::before, .xmas footer::before, .xmas .marquee::before {
+    content: ""; position: absolute; left: 0; right: 0; top: -11px; height: 14px; z-index: 2; pointer-events: none;
+    background: var(--ridge) 0 0 / 160px 100% repeat-x; filter: drop-shadow(0 2px 2px rgba(0,0,0,.10));
+    animation: settle 1.2s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .xmas .marquee { position: relative; }
+  .xmas .marquee::before { top: -1px; -webkit-mask: none; }
+  .xmas section:nth-of-type(even)::before { background-position: 80px 0; }
+  @keyframes settle { from { transform: scaleY(0); transform-origin: 50% 100%; opacity: 0; } }
+  /* snow on the roof of the top bar; the lights hang just under it */
+  .xmas nav::after {
+    content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 4px); height: 13px; z-index: 2; pointer-events: none;
+    background: var(--ridge) 40px 0 / 140px 100% repeat-x; transform: scaleY(-1); filter: drop-shadow(0 -2px 2px rgba(0,0,0,.12));
+  }
+  .xmas .xlights { top: calc(100% + 5px); }
+  :root:not([data-theme="dark"]):not([data-theme="space"]) .xmas section::before, :root:not([data-theme="dark"]):not([data-theme="space"]) .xmas footer::before,
+  :root:not([data-theme="dark"]):not([data-theme="space"]) .xmas .marquee::before { filter: drop-shadow(0 2px 2px rgba(120,80,40,.28)); }
+  :root:not([data-theme="dark"]):not([data-theme="space"]) .xmas nav::after { filter: drop-shadow(0 -2px 2px rgba(120,80,40,.3)); }
+  /* snowbank that slowly builds up at the bottom of the screen */
+  .snowbank { position: fixed; left: 0; right: 0; bottom: 0; z-index: 24; pointer-events: none; height: 0; display: none;
+    background: var(--ridge) 0 0 / 180px 16px repeat-x, linear-gradient(#fff, #fff) 0 15px / 100% 100% no-repeat;
+    filter: drop-shadow(0 -3px 4px rgba(0,0,0,.10)); --bank-h: 30px; }
+  .xmas.xm-snow .snowbank { display: block; animation: bank 60s cubic-bezier(.2,.6,.4,1) forwards; }
+  @keyframes bank { 0% { height: 0; } 5% { height: 13px; } 100% { height: var(--bank-h); } }
+  .snowbank::after { content: ""; position: absolute; inset: 0; opacity: .9;
+    background-image: radial-gradient(circle at 12% 70%, #e0f2fe 2px, transparent 3px), radial-gradient(circle at 47% 60%, #e0f2fe 1.5px, transparent 2.5px), radial-gradient(circle at 81% 75%, #e0f2fe 2px, transparent 3px);
+    background-size: 220px 100%; }
+  [data-theme="dark"] .snowbank, [data-theme="space"] .snowbank { filter: drop-shadow(0 -3px 6px rgba(255,255,255,.08)); }
+  @media (max-width: 720px) { .snowbank { --bank-h: 20px; } }
+  @media (prefers-reduced-motion: reduce) { .xmas.xm-snow .snowbank { animation: none; height: var(--bank-h); } }
+  .xmas.xm-snow .totop, .xmas.xm-snow .zerog-btn { bottom: 34px; }
+  .xmas.xm-snow .toast { bottom: 42px; }
+  @media (max-width: 720px) { .xmas.xm-snow .totop, .xmas.xm-snow .zerog-btn { bottom: 26px; } }
+  /* icy frost down the left and right edges */
+  .frost { position: fixed; top: 0; bottom: 0; width: 26px; z-index: 23; pointer-events: none; display: none; opacity: .85; }
+  .frost.l { left: 0; background: linear-gradient(90deg, rgba(219,234,254,.75), rgba(219,234,254,0)); }
+  .frost.r { right: 0; background: linear-gradient(270deg, rgba(219,234,254,.75), rgba(219,234,254,0)); }
+  .frost::after { content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,.95) 1.3px, transparent 2px), radial-gradient(circle, rgba(255,255,255,.8) 1px, transparent 1.6px);
+    background-size: 13px 37px, 9px 23px; background-position: 3px 0, 11px 9px;
+    -webkit-mask: linear-gradient(90deg, #000, transparent 85%); mask: linear-gradient(90deg, #000, transparent 85%); }
+  .frost.r::after { -webkit-mask: linear-gradient(270deg, #000, transparent 85%); mask: linear-gradient(270deg, #000, transparent 85%); }
+  [data-theme="dark"] .frost, [data-theme="space"] .frost { opacity: .35; }
+  .xmas .frost { display: block; }
+  @media (max-width: 720px) { .frost { width: 12px; } }
+
   /* ================= Space mode ================= */
   :root[data-theme="space"] {
     color-scheme: dark;
@@ -952,6 +1002,8 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 </button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <canvas class="snow" id="snow" aria-hidden="true"></canvas>
+<div class="snowbank" id="snowbank" aria-hidden="true"></div>
+<div class="frost l" aria-hidden="true"></div><div class="frost r" aria-hidden="true"></div>
 <button class="sleigh" id="sleigh" aria-label="Santa's sleigh: click for a present" data-i18n-aria="a.sleigh" tabindex="-1"><span class="sl-trail" aria-hidden="true"></span><span aria-hidden="true">🦌🦌🛷</span></button>
 <div class="term-backdrop" id="termBackdrop"></div>
 <div class="term" id="term" role="dialog" aria-modal="true" aria-label="Terminal">
