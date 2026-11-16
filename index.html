@@ -723,6 +723,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   .xmas .frost { display: block; }
   @media (max-width: 720px) { .frost { width: 12px; } }
 
+  /* ================= Comet mouse trail ================= */
+  .comet { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 93; pointer-events: none; }
+
   /* ================= Space mode ================= */
   :root[data-theme="space"] {
     color-scheme: dark;
@@ -1002,6 +1005,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 </button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <canvas class="snow" id="snow" aria-hidden="true"></canvas>
+<canvas class="comet" id="comet" aria-hidden="true"></canvas>
 <div class="snowbank" id="snowbank" aria-hidden="true"></div>
 <div class="frost l" aria-hidden="true"></div><div class="frost r" aria-hidden="true"></div>
 <button class="sleigh" id="sleigh" aria-label="Santa's sleigh: click for a present" data-i18n-aria="a.sleigh" tabindex="-1"><span class="sl-trail" aria-hidden="true"></span><span aria-hidden="true">🦌🦌🛷</span></button>
@@ -1705,6 +1709,97 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
 
 
+
+  // ================= Comet mouse trail =================
+  let cometApi = { toggle() { return false; } };
+  (function () {
+    const cv = $("comet"), ctx = cv.getContext("2d");
+    let on = true; try { on = localStorage.getItem("comet") !== "0"; } catch {}
+    const enabled = () => on && fine && !reduce;
+    let W = 0, H = 0, dpr = 1, pts = [], sparks = [], raf = 0, c1 = "#fb923c", c2 = "#fdba74", additive = false;
+    function size() { dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    function colors() {
+      const cs = getComputedStyle(document.documentElement);
+      c1 = cs.getPropertyValue("--accent").trim() || c1; c2 = cs.getPropertyValue("--accent-2").trim() || c2;
+      const th = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      additive = th !== "light";
+    }
+    size(); colors();
+    addEventListener("resize", size);
+    new MutationObserver(colors).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+
+    const TAIL = 420, SPARK = 700;
+    const clear = hex => { const m = /^#([0-9a-f]{6})$/i.exec(hex); if (!m) return "rgba(255,255,255,0)"; const n = parseInt(m[1], 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},0)`; };
+    addEventListener("pointermove", e => {
+      if (!enabled() || e.pointerType !== "mouse") return;
+      const now = performance.now(), last = pts[pts.length - 1];
+      pts.push({ x: e.clientX, y: e.clientY, t: now });
+      if (last) {
+        const sp = Math.hypot(e.clientX - last.x, e.clientY - last.y);
+        const n = Math.min(3, Math.floor(sp / 14));
+        for (let k = 0; k < n; k++) sparks.push({ x: e.clientX, y: e.clientY, vx: (Math.random() - .5) * 1.6 - (e.clientX - last.x) * .03,
+          vy: (Math.random() - .5) * 1.6 - (e.clientY - last.y) * .03, t: now, r: Math.random() * 1.6 + .6 });
+      }
+      if (!raf) raf = requestAnimationFrame(frame);
+    }, { passive: true });
+    document.addEventListener("pointerleave", () => { pts = []; });
+
+    function frame(now) {
+      ctx.clearRect(0, 0, W, H);
+      pts = pts.filter(p => now - p.t < TAIL);
+      sparks = sparks.filter(s => now - s.t < SPARK);
+      ctx.globalCompositeOperation = additive ? "lighter" : "source-over";
+      // tail: a tapering, fading ribbon through the recent points
+      if (pts.length > 1) {
+        // the tail is a filled ribbon: wide at the head, tapering to nothing
+        const left = [], right = [];
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i], q = pts[Math.min(i + 1, pts.length - 1)], o = pts[Math.max(i - 1, 0)];
+          let dx = q.x - o.x, dy = q.y - o.y; const len = Math.hypot(dx, dy) || 1; dx /= len; dy /= len;
+          const k = Math.max(0, 1 - (now - p.t) / TAIL), w = 11 * Math.pow(k, 1.4) * (i / (pts.length - 1)) + .3;
+          left.push([p.x - dy * w, p.y + dx * w]); right.push([p.x + dy * w, p.y - dx * w]);
+        }
+        const tailPath = () => { ctx.beginPath(); ctx.moveTo(left[0][0], left[0][1]); left.forEach(v => ctx.lineTo(v[0], v[1])); for (let i = right.length - 1; i >= 0; i--) ctx.lineTo(right[i][0], right[i][1]); ctx.closePath(); };
+        const t0 = pts[0], tn = pts[pts.length - 1];
+        const g = ctx.createLinearGradient(t0.x, t0.y, tn.x, tn.y);
+        g.addColorStop(0, clear(c2)); g.addColorStop(.45, c2); g.addColorStop(1, c1);
+        ctx.save();
+        ctx.shadowColor = c1; ctx.shadowBlur = 18;
+        ctx.globalAlpha = additive ? .75 : .6; ctx.fillStyle = g; tailPath(); ctx.fill();
+        ctx.restore();
+        // bright white core down the middle
+        ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#fff";
+        ctx.beginPath(); ctx.moveTo(pts[Math.floor(pts.length * .5)].x, pts[Math.floor(pts.length * .5)].y);
+        for (let i = Math.floor(pts.length * .5) + 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+        ctx.globalAlpha = additive ? .8 : .7; ctx.lineWidth = 2.2; ctx.stroke();
+      }
+      // head: glowing ball that fades once the mouse rests
+      const h = pts[pts.length - 1];
+      if (h) {
+        const k = 1 - (now - h.t) / TAIL, r = 22;
+        const g = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, r);
+        g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(.18, "rgba(255,255,255,.95)"); g.addColorStop(.35, c2); g.addColorStop(1, clear(c2));
+        ctx.globalAlpha = Math.max(0, k); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(h.x, h.y, r, 0, 6.283); ctx.fill();
+      }
+      // sparks shed from the tail
+      for (const s of sparks) {
+        const k = 1 - (now - s.t) / SPARK;
+        s.x += s.vx; s.y += s.vy; s.vx *= .97; s.vy = s.vy * .97 + .02;
+        ctx.globalAlpha = k * .9; ctx.fillStyle = k > .5 ? "#fff" : c2;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * (.5 + k * .5), 0, 6.283); ctx.fill();
+      }
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
+      raf = (pts.length || sparks.length) ? requestAnimationFrame(frame) : (ctx.clearRect(0, 0, W, H), 0);
+    }
+    cometApi = {
+      toggle(v) {
+        on = v == null ? !on : v; try { localStorage.setItem("comet", on ? "1" : "0"); } catch {}
+        if (!on) { pts = []; sparks = []; ctx.clearRect(0, 0, W, H); }
+        return on;
+      }
+    };
+  })();
+
   // ================= Christmas =================
   let xmasApi = { toggle() {}, snow() {} };
   (function () {
@@ -2005,7 +2100,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         welcome: "Welcome to <span class='acc'>albsoldier.dev</span> 🚀  Type <b class='ok'>help</b> to see what you can do.",
         tip: "Tip: ↑ ↓ for history, Tab to autocomplete, Esc to close.",
         help: { help: "show this list", about: "who I am", projects: "list my projects", "open <n>": "open a project", skills: "what I work with",
-          contact: "how to reach me", theme: "light, dark or space", lang: "en or sq", gravity: "turn off gravity", xmas: "Christmas mode on/off", snow: "let it snow", coffee: "take a break",
+          contact: "how to reach me", theme: "light, dark or space", lang: "en or sq", gravity: "turn off gravity", comet: "mouse comet on/off", xmas: "Christmas mode on/off", snow: "let it snow", coffee: "take a break",
           rocket: "launch a rocket", ls: "list files", "cat <file>": "read a file", date: "time in Tirana", whoami: "about you", clear: "clear the screen", exit: "close the terminal" },
         about: "Hi! I'm <span class='acc'>Albsoldier</span>, a web developer from Albania 🇦🇱\nI build fast, friendly websites with clean front-ends,\nsmooth ordering flows and back-ends that just work.",
         projectsHead: "Projects (type <b class='ok'>open 1</b> to view one):",
@@ -2024,7 +2119,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         welcome: "Mirë se erdhe në <span class='acc'>albsoldier.dev</span> 🚀  Shkruaj <b class='ok'>help</b> për të parë çfarë mund të bësh.",
         tip: "Këshillë: ↑ ↓ për historikun, Tab për plotësim, Esc për ta mbyllur.",
         help: { help: "shfaq këtë listë", about: "kush jam unë", projects: "lista e projekteve", "open <n>": "hap një projekt", skills: "me çfarë punoj",
-          contact: "si të më kontaktosh", theme: "light, dark ose space", lang: "en ose sq", gravity: "fik gravitetin", xmas: "ndiz/fik Krishtlindjet", snow: "le të bjerë borë", coffee: "bëj një pushim",
+          contact: "si të më kontaktosh", theme: "light, dark ose space", lang: "en ose sq", gravity: "fik gravitetin", comet: "ndiz/fik kometën e miut", xmas: "ndiz/fik Krishtlindjet", snow: "le të bjerë borë", coffee: "bëj një pushim",
           rocket: "lësho një raketë", ls: "listo skedarët", "cat <file>": "lexo një skedar", date: "ora në Tiranë", whoami: "rreth teje", clear: "pastro ekranin", exit: "mbyll terminalin" },
         about: "Përshëndetje! Jam <span class='acc'>Albsoldier</span>, zhvillues web nga Shqipëria 🇦🇱\nNdërtoj faqe interneti të shpejta dhe miqësore, me ndërfaqe të pastra,\nporosi të thjeshta online dhe back-end që thjesht funksionon.",
         projectsHead: "Projektet (shkruaj <b class='ok'>open 1</b> për të parë njërin):",
@@ -2059,7 +2154,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
     }
 
-    const COMMANDS = ["xmas", "snow", "help", "about", "projects", "open", "skills", "contact", "theme", "lang", "gravity", "coffee", "rocket", "ls", "cat", "date", "whoami", "echo", "clear", "exit", "sudo", "hire"];
+    const COMMANDS = ["comet", "xmas", "snow", "help", "about", "projects", "open", "skills", "contact", "theme", "lang", "gravity", "coffee", "rocket", "ls", "cat", "date", "whoami", "echo", "clear", "exit", "sudo", "hire"];
 
     async function run(raw) {
       const cmdline = raw.trim();
@@ -2134,6 +2229,11 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         case "date":
           line(`${tt("tirana")} <span class="acc">${new Date().toLocaleString(L() === "sq" ? "sq-AL" : "en-GB", { timeZone: "Europe/Tirane", weekday: "long", hour: "2-digit", minute: "2-digit", day: "numeric", month: "long" })}</span>`); break;
         case "whoami": line(tt("whoami")); break;
+        case "comet": case "kometa": {
+          const on = cometApi.toggle();
+          line(on ? (L() === "sq" ? "☄️ Kometa u ndez. Lëviz miun!" : "☄️ Comet trail on. Move your mouse!") : (L() === "sq" ? "Kometa u fik." : "Comet trail off."), on ? "ok" : "dim");
+          break;
+        }
         case "xmas": case "christmas": case "krishtlindje": {
           const on = xmasApi.toggle(); line(on ? "🎄 Ho ho ho! " + (L() === "sq" ? "Gëzuar Krishtlindjet!" : "Merry Christmas!") : "🎄 " + t("xmasOff"), on ? "ok" : "dim");
           if (on) line("        *\n       /.\\\n      /o..\\\n      /..o\\\n     /.o..o\\\n     /...o.\\\n    /..o....\\\n    ^^^[_]^^^", "art");
