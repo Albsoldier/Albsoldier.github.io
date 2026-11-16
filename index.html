@@ -512,6 +512,29 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   .lang:focus-visible, .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   @media (max-width: 720px) { nav ul { gap: 12px; } }
 
+  /* ================= Zero gravity ================= */
+  .in.settled { animation: none; opacity: 1; transform: none; }
+  .zerog-btn { position: fixed; left: 18px; bottom: 18px; z-index: 30; width: 52px; height: 52px; border-radius: 16px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--accent); cursor: pointer; display: none; place-items: center; box-shadow: var(--shadow); transition: transform .3s; }
+  .zerog-btn svg { width: 26px; height: 26px; animation: spin 14s linear infinite; }
+  .zerog-btn:hover { transform: translateY(-3px) rotate(-8deg); }
+  [data-theme="space"] .zerog-btn { display: grid; }
+  .zero-g .zerog-btn { display: none; }
+  .zg-restore { position: fixed; left: 50%; bottom: 22px; z-index: 96; transform: translate(-50%, 90px); opacity: 0; pointer-events: none;
+    display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px; border: 0; cursor: pointer; font-weight: 700; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 45%, transparent);
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .3s; }
+  [data-theme="space"] .zg-restore { color: #150d2e; }
+  .zero-g .zg-restore { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+  .zero-g .zg-restore:hover { transform: translate(-50%, -3px) scale(1.03); }
+  .zero-g header.hero, .zero-g .contact-card { overflow: visible; }
+  .zero-g .blob, .zero-g .contact-card::after { display: none; }
+  .zero-g [data-zg] { position: relative; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; will-change: transform; }
+  .zero-g [data-zg].grabbing { cursor: grabbing; z-index: 60; }
+  .zero-g [data-zg] * { pointer-events: none; }
+  .zero-g .totop { display: none; }
+  .zero-g .toast { bottom: 86px; }
+
   /* ================= Space mode ================= */
   :root[data-theme="space"] {
     color-scheme: dark;
@@ -778,6 +801,10 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg>
 </button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="zerog-btn" id="zerogBtn" aria-label="Turn on zero gravity" title="Zero gravity" data-i18n-aria="a.zerog">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="10.5" ry="3.5" transform="rotate(-20 12 12)"/><circle cx="20" cy="5" r="1" fill="currentColor"/></svg>
+</button>
+<button class="zg-restore" id="zgRestore"><span aria-hidden="true">🌍</span><span data-i18n="zg.restore">Restore gravity</span></button>
 
 <footer>
   <div class="wrap">© <span id="year"></span> Albsoldier</div>
@@ -923,7 +950,8 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     "d.feat": "Veçoritë", "d.built": "Ndërtuar me", "d.type": "Lloji", "d.visit": "Vizito faqen",
     "a.theme": "Ndrysho temën (e ndritshme, e errët, hapësirë)", "a.avatar": "Përshëndet astronautin", "a.tech": "Teknologjitë që përdor",
     "a.top": "Kthehu në krye", "a.closeF": "Mbyll dosjen", "a.closeP": "Mbyll projektin",
-    "a.copyE": "Kopjo adresën e email-it", "a.copyP": "Kopjo numrin e telefonit", "a.lang": "Ndrysho gjuhën: anglisht / shqip"
+    "a.copyE": "Kopjo adresën e email-it", "a.copyP": "Kopjo numrin e telefonit", "a.lang": "Ndrysho gjuhën: anglisht / shqip",
+    "zg.restore": "Rikthe gravitetin", "a.zerog": "Aktivizo zero gravitetin"
   };
   // Text set from JavaScript
   const T = {
@@ -932,14 +960,16 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       words: ["fast", "friendly", "modern", "real-time", "reliable"],
       lines: ["Hi there! 👋", "Welcome aboard 🚀", "Need a website?", "Check out my work!", "Coffee first ☕", "Houston, we have a website", "Let's build something!"],
       projects: n => n + (n === 1 ? " project" : " projects"), view: "View project", copied: "Copied to clipboard ✓",
-      themes: { light: "☀️ Light mode", dark: "🌙 Dark mode", space: "🚀 Space mode, welcome aboard!" }, switched: "🇬🇧 English"
+      themes: { light: "☀️ Light mode", dark: "🌙 Dark mode", space: "🚀 Space mode, welcome aboard!" }, switched: "🇬🇧 English",
+      zgOn: "🪐 Zero gravity! Grab things and throw them"
     },
     sq: {
       title: "Albsoldier · Zhvillues Web", desc: "Portofoli i Albsoldier, zhvillues web që ndërton faqe interneti të shpejta dhe miqësore.",
       words: ["të shpejta", "miqësore", "moderne", "në kohë reale", "të besueshme"],
       lines: ["Përshëndetje! 👋", "Mirë se erdhe në bord 🚀", "Të duhet një faqe interneti?", "Shiko punët e mia!", "Fillimisht një kafe ☕", "Houston, kemi një faqe interneti", "Le të ndërtojmë diçka!"],
       projects: n => n + (n === 1 ? " projekt" : " projekte"), view: "Shiko projektin", copied: "U kopjua ✓",
-      themes: { light: "☀️ Tema e ndritshme", dark: "🌙 Tema e errët", space: "🚀 Tema Hapësirë, mirë se erdhe në bord!" }, switched: "🇦🇱 Shqip"
+      themes: { light: "☀️ Tema e ndritshme", dark: "🌙 Tema e errët", space: "🚀 Tema Hapësirë, mirë se erdhe në bord!" }, switched: "🇦🇱 Shqip",
+      zgOn: "🪐 Zero gravitet! Kap gjërat dhe hidhi"
     }
   };
   const L = () => document.documentElement.lang === "sq" ? "sq" : "en";
@@ -1297,7 +1327,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
     // magnetic buttons
     document.addEventListener("pointermove", e => {
-      const b = e.target.closest(".btn, .theme-btn, .totop, .lang");
+      const b = zeroG ? null : e.target.closest(".btn, .theme-btn, .totop, .lang");
       document.querySelectorAll(".magnet").forEach(m => { if (m !== b) { m.style.translate = ""; m.classList.remove("magnet"); } });
       if (!b) return;
       const r = b.getBoundingClientRect();
@@ -1310,6 +1340,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       el.classList.add("tilt");
       if (!el.querySelector(":scope > .glare")) el.insertAdjacentHTML("beforeend", '<span class="glare" aria-hidden="true"></span>');
       el.addEventListener("pointermove", e => {
+        if (zeroG) return;
         const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
         el.style.transition = "transform .08s";
         el.style.transform = `perspective(900px) rotateX(${(.5 - y) * max}deg) rotateY(${(x - .5) * max}deg) translateY(-4px)`;
@@ -1321,6 +1352,119 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     document.querySelectorAll(".proj").forEach(el => tilt(el, 7));
     cardHooks.push(el => tilt(el, 7));
   }
+
+
+  // ================= Zero gravity =================
+  let zeroG = false;
+  document.querySelectorAll(".in").forEach(el => el.addEventListener("animationend", () => el.classList.add("settled"), { once: true }));
+  (function () {
+    const SEL = ".logo, .eyebrow, h1, .lead, .btns .btn, .stat, .avatar-wrap, section h2, section .sub, .hint, .folder, .skill-box, .step, #about p, .contact-card > p, .contact-item, footer .wrap";
+    let bodies = [], raf = 0, drag = null;
+    const topEdge = () => document.querySelector("nav").getBoundingClientRect().bottom;
+
+    function start() {
+      if (zeroG || document.body.classList.contains("locked")) return;
+      zeroG = true;
+      document.querySelectorAll(".in").forEach(el => el.classList.add("settled"));
+      document.querySelectorAll(".reveal").forEach(el => el.classList.add("shown"));
+      document.documentElement.classList.add("zero-g");
+      document.body.classList.add("locked");
+      document.querySelectorAll(".magnet").forEach(m => { m.style.translate = ""; m.classList.remove("magnet"); });
+      const top = topEdge();
+      let els = [...document.querySelectorAll(SEL)].filter(el => {
+        const r = el.getBoundingClientRect();
+        return el.offsetParent && r.width > 0 && r.bottom > top && r.top < innerHeight;
+      });
+      els = els.filter(el => !els.some(o => o !== el && o.contains(el)));
+      bodies = els.map(el => {
+        el.dataset.zg = "";
+        el.style.transition = "none"; el.style.transform = "";
+        const r = el.getBoundingClientRect();
+        const sp = reduce ? 0 : 1;
+        return { el, r, x: 0, y: 0, a: 0,
+          vx: (Math.random() - .5) * 3 * sp, vy: (-Math.random() * 2.2 - .4) * sp, va: (Math.random() - .5) * 1.4 * sp };
+      });
+      toast(t("zgOn"));
+      $("zgRestore").focus({ preventScroll: true });
+      if (!raf) raf = requestAnimationFrame(step);
+    }
+
+    function step() {
+      const W = innerWidth, H = innerHeight, top = topEdge();
+      for (const b of bodies) {
+        if (b !== drag?.b) {
+          b.x += b.vx; b.y += b.vy; b.a += b.va;
+          b.vx *= .996; b.vy *= .996; b.va *= .995;
+          const l = b.r.left + b.x, rt = b.r.right + b.x, tp = b.r.top + b.y, bt = b.r.bottom + b.y;
+          if (l < 0) { b.x -= l; b.vx = Math.abs(b.vx) * .85; b.va += b.vy * .05; }
+          if (rt > W) { b.x -= rt - W; b.vx = -Math.abs(b.vx) * .85; b.va -= b.vy * .05; }
+          if (tp < top) { b.y += top - tp; b.vy = Math.abs(b.vy) * .85; b.va += b.vx * .05; }
+          if (bt > H) { b.y -= bt - H; b.vy = -Math.abs(b.vy) * .85; b.va -= b.vx * .05; }
+          // keep things gently drifting
+          if (!reduce && Math.hypot(b.vx, b.vy) < .25) { b.vx += (Math.random() - .5) * .2; b.vy += (Math.random() - .5) * .2; }
+        }
+        b.el.style.transform = `translate(${b.x}px, ${b.y}px) rotate(${b.a}deg)`;
+      }
+      raf = zeroG ? requestAnimationFrame(step) : 0;
+    }
+
+    function stop() {
+      if (!zeroG) return;
+      zeroG = false; drag = null;
+      bodies.forEach((b, i) => {
+        b.el.classList.remove("grabbing");
+        b.el.style.transition = `transform ${reduce ? 0 : .9 + i * .02}s cubic-bezier(.34,1.4,.5,1)`;
+        b.el.style.transform = "";
+      });
+      const done = bodies; bodies = [];
+      setTimeout(() => {
+        done.forEach(b => { delete b.el.dataset.zg; b.el.style.transition = ""; b.el.style.transform = ""; });
+        document.documentElement.classList.remove("zero-g");
+        document.body.classList.remove("locked");
+      }, reduce ? 0 : 1300);
+    }
+
+    // grab and throw
+    document.addEventListener("pointerdown", e => {
+      if (!zeroG) return;
+      const el = e.target.closest("[data-zg]"); if (!el) return;
+      const b = bodies.find(x => x.el === el); if (!b) return;
+      e.preventDefault();
+      drag = { b, px: e.clientX, py: e.clientY, ox: b.x, oy: b.y, hist: [{ x: e.clientX, y: e.clientY, t: performance.now() }], id: e.pointerId };
+      el.classList.add("grabbing");
+      b.vx = b.vy = 0; b.va *= .3;
+    });
+    addEventListener("pointermove", e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      drag.b.x = drag.ox + e.clientX - drag.px; drag.b.y = drag.oy + e.clientY - drag.py;
+      drag.hist.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+      if (drag.hist.length > 6) drag.hist.shift();
+    });
+    const release = e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const h = drag.hist, a = h[0], z = h[h.length - 1], dt = Math.max(16, z.t - a.t);
+      const k = 16 / dt;
+      drag.b.vx = clamp((z.x - a.x) * k, -40, 40); drag.b.vy = clamp((z.y - a.y) * k, -40, 40);
+      drag.b.va = clamp(drag.b.vx * .4, -12, 12);
+      drag.b.el.classList.remove("grabbing");
+      drag = null;
+    };
+    addEventListener("pointerup", release); addEventListener("pointercancel", release);
+    // links and buttons that float shouldn't fire while you play
+    document.addEventListener("click", e => { if (zeroG && e.target.closest("[data-zg]")) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+    $("zerogBtn").addEventListener("click", start);
+    $("zgRestore").addEventListener("click", stop);
+    addEventListener("keydown", e => { if (e.key === "Escape" && zeroG) { e.stopImmediatePropagation(); stop(); } }, true);
+    // secret word: type "gravity" (or "graviteti")
+    let typed = "";
+    addEventListener("keydown", e => {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+      typed = (typed + e.key.toLowerCase()).slice(-12);
+      if (/gravit(y|eti)$/.test(typed)) { typed = ""; zeroG ? stop() : start(); }
+    });
+    addEventListener("resize", () => { if (zeroG) stop(); });
+  })();
 
   addEventListener("keydown", e => {
     if (e.key !== "Escape") return;
