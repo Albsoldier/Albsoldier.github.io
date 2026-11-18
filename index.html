@@ -232,8 +232,8 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   .proj.ready:hover { transform: translateY(-6px); border-color: var(--accent); }
   .proj:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
   .proj .shot { aspect-ratio: 16 / 9; overflow: hidden; position: relative; background: var(--border); }
-  .proj .shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
-  .proj.ready:hover .shot img { transform: scale(1.06); }
+  .proj .shot > img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+  .proj.ready:hover .shot > img { transform: scale(1.06); }
   .proj .badge {
     position: absolute; top: 14px; left: 14px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
     background: rgba(0,0,0,.55); color: #fff; backdrop-filter: blur(6px);
@@ -261,7 +261,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   }
   .detail.open { visibility: visible; }
   .detail .hero-img { position: relative; aspect-ratio: 21 / 9; overflow: hidden; }
-  .detail .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .detail .hero-img > img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .detail .hero-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.55)); }
   .detail .hero-img h3 {
     position: absolute; left: 28px; bottom: 20px; right: 80px; z-index: 1; margin: 0; color: #fff;
@@ -813,6 +813,95 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   .qr-box svg, .qr-box img { display: block; width: 240px; height: 240px; }
   .qr-cap { text-align: center; color: var(--muted); font-size: 14px; margin: 0 auto; max-width: 380px; }
 
+  /* ================= Device mockups ================= */
+  .proj .shot.has-dev, .detail .hero-img { container-type: inline-size; }
+  .proj .shot.has-dev > img, .detail .hero-img.has-dev > img { filter: blur(14px) brightness(.55) saturate(1.2); transform: scale(1.2); }
+  .proj.ready:hover .shot.has-dev > img { transform: scale(1.25); }
+  .devices { position: absolute; left: 50%; top: 50%; width: 62em; height: 36em; transform: translate(-50%, -46%); perspective: 140em; font-size: 1.25cqw; }
+  .detail .devices { font-size: 1.12cqw; transform: translate(-50%, -40%); }
+  .dev3d { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--rx, 8deg)) rotateY(var(--ry, -16deg)); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+  .devices.live .dev3d { animation: devFloat 7s ease-in-out infinite; }
+  @keyframes devFloat { 50% { translate: 0 -.8em; } }
+  .laptop { position: absolute; left: 3em; top: 0; width: 48em; transform: translateZ(0); }
+  .lid { position: relative; padding: 1.1em 1.1em 1.5em; border-radius: 1.6em 1.6em .4em .4em; background: linear-gradient(160deg, #2a2a33, #15151b);
+    box-shadow: inset 0 0 0 .18em #3f3f4a, 0 2em 4em rgba(0,0,0,.35); }
+  .lid .cam { position: absolute; top: .4em; left: 50%; width: .45em; height: .45em; margin-left: -.22em; border-radius: 50%; background: #3b3b46; }
+  .screen, .pscreen { position: relative; overflow: hidden; background: #000; }
+  .screen { height: 28.6em; border-radius: .35em; }
+  .screen img, .pscreen img { display: block; width: 100%; height: auto; }
+  .screen::after, .pscreen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,.14), transparent 35%); }
+  .base { position: relative; width: 56em; height: 1.7em; margin-left: -4em; border-radius: .2em .2em 1.4em 1.4em;
+    background: linear-gradient(180deg, #e4e4e7, #a1a1aa 70%, #71717a); box-shadow: 0 1.2em 2em rgba(0,0,0,.35); }
+  .base span { position: absolute; left: 50%; top: 0; width: 9em; height: .6em; margin-left: -4.5em; border-radius: 0 0 .6em .6em; background: #8b8b94; }
+  .phone { position: absolute; right: 1em; bottom: 1.5em; width: 13em; height: 27em; padding: .65em; border-radius: 2.3em; background: #0d0d12;
+    box-shadow: inset 0 0 0 .22em #3a3a44, 0 1.6em 3.4em rgba(0,0,0,.5); transform: translateZ(7em); }
+  .pscreen { height: 100%; border-radius: 1.75em; }
+  .phone .notch { position: absolute; top: 1.15em; left: 50%; width: 4.2em; height: 1.15em; margin-left: -2.1em; border-radius: 1em; background: #000; }
+  .dev-shadow { position: absolute; left: 6%; right: 6%; bottom: -2.5em; height: 3.5em; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%); }
+  img.roll { animation: shotRoll var(--dur, 14s) ease-in-out 1.2s infinite alternate; }
+  @keyframes shotRoll { 0%, 8% { transform: translateY(0); } 92%, 100% { transform: translateY(var(--dist)); } }
+  .devices.live .laptop:hover img, .devices.live .phone:hover img { animation-play-state: paused; }
+  .detail .hero-img.has-dev { aspect-ratio: 16 / 9; background: #0b0a14; }
+  .detail .hero-img.has-dev::after { background: linear-gradient(180deg, rgba(0,0,0,.55), transparent 28%); }
+  .detail .hero-img.has-dev h3 { top: 18px; bottom: auto; font-size: clamp(20px, 3.4vw, 30px); }
+  .dev-wrap { position: absolute; inset: 0; z-index: 1; }
+  .dev-note { display: none; position: absolute; z-index: 2; left: 50%; bottom: 10px; transform: translateX(-50%); margin: 0; padding: 4px 12px; border-radius: 999px;
+    font-size: 12px; color: #fff; background: rgba(0,0,0,.45); backdrop-filter: blur(4px); white-space: nowrap; }
+  .detail .hero-img.has-dev .dev-note { display: block; }
+  @media (max-width: 720px) { .detail .hero-img.has-dev { aspect-ratio: 4 / 3; } .detail .devices { font-size: 1.25cqw; transform: translate(-50%, -36%); } .dev-note { display: none !important; } }
+
+  /* ================= Chat with the astronaut ================= */
+  .chat-fab { position: fixed; right: 18px; bottom: 18px; z-index: 31; width: 60px; height: 60px; padding: 0; border-radius: 50%; cursor: pointer; overflow: visible;
+    border: 3px solid var(--accent); background: var(--surface); box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 40%, transparent); transition: transform .25s cubic-bezier(.34,1.5,.5,1); }
+  .chat-fab img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+  .chat-fab:hover { transform: scale(1.08) rotate(-6deg); }
+  .chat-fab[aria-expanded="true"] { transform: scale(.9); }
+  .chat-dot { position: absolute; right: 1px; top: 1px; width: 14px; height: 14px; border-radius: 50%; background: #22c55e; border: 2px solid var(--surface); }
+  .chat-hint { position: fixed; right: 88px; bottom: 30px; z-index: 31; padding: 9px 14px; border-radius: 14px 14px 4px 14px; border: 1px solid var(--border); cursor: pointer;
+    background: var(--surface); color: var(--text); font: 600 14px Inter, system-ui, sans-serif; box-shadow: var(--shadow); white-space: nowrap;
+    opacity: 0; transform: translateX(10px) scale(.9); pointer-events: none; transition: opacity .3s, transform .4s cubic-bezier(.34,1.5,.5,1); }
+  .chat-hint.show { opacity: 1; transform: none; pointer-events: auto; }
+  .totop { bottom: 90px; }
+  .xmas.xm-snow .totop { bottom: 106px; }
+  .xmas.xm-snow .chat-fab { bottom: 34px; }
+  .xmas.xm-snow .chat-hint { bottom: 46px; }
+  @media (max-width: 720px) { .xmas.xm-snow .totop { bottom: 98px; } .xmas.xm-snow .chat-fab { bottom: 26px; } .xmas.xm-snow .chat-hint { bottom: 38px; } }
+  .zero-g .chat-fab, .zero-g .chat-hint { display: none; }
+  .chat { position: fixed; right: 18px; bottom: 90px; z-index: 96; width: min(380px, calc(100vw - 24px)); height: min(560px, calc(100dvh - 120px));
+    display: flex; flex-direction: column; overflow: hidden; border-radius: 22px; background: var(--surface); color: var(--text); border: 1px solid var(--border);
+    box-shadow: 0 24px 60px rgba(0,0,0,.35); transform-origin: 100% 100%; animation: chatIn .35s cubic-bezier(.2,.8,.2,1); }
+  .chat[hidden] { display: none; }
+  @keyframes chatIn { from { opacity: 0; transform: translateY(16px) scale(.92); } }
+  .chat-head { display: flex; align-items: center; gap: 12px; padding: 14px 14px 12px 16px; color: #fff; background: linear-gradient(135deg, #c2410c, #e8772f); }
+  [data-theme="space"] .chat-head { background: linear-gradient(135deg, #5b21b6, #a21caf); }
+  .chat-head > div { flex: 1; min-width: 0; }
+  .chat-head b { display: block; font-size: 16px; }
+  .chat-head small { display: flex; align-items: center; gap: 6px; font-size: 12px; opacity: .9; }
+  .chat-head small::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
+  .chat-ava { width: 40px; height: 40px; border-radius: 12px; border: 2px solid rgba(255,255,255,.6); }
+  .chat-x { width: 34px; height: 34px; border-radius: 10px; border: 0; background: rgba(255,255,255,.18); color: #fff; cursor: pointer; font-size: 15px; }
+  .chat-log { flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 10px 13px; border-radius: 16px; font-size: 14.5px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; animation: rise .3s ease; }
+  .msg.bot { align-self: flex-start; background: var(--accent-soft); border-bottom-left-radius: 5px; }
+  .msg.me { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 5px; }
+  [data-theme="space"] .msg.me { color: #150d2e; }
+  .msg a { color: inherit; font-weight: 600; text-decoration: underline; }
+  .msg.typing { display: flex; gap: 4px; padding: 14px 16px; }
+  .msg.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: blink 1.2s infinite; }
+  .msg.typing i:nth-child(2) { animation-delay: .15s; } .msg.typing i:nth-child(3) { animation-delay: .3s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+  .chat-chips { display: flex; gap: 6px; padding: 0 12px 8px; overflow-x: auto; scrollbar-width: none; }
+  .chat-chips button { flex-shrink: 0; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: 500 13px Inter, system-ui, sans-serif; cursor: pointer; }
+  .chat-chips button:hover { border-color: var(--accent); color: var(--accent); }
+  .chat-form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); }
+  .chat-form input { flex: 1; min-width: 0; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: 15px Inter, system-ui, sans-serif; outline: none; }
+  .chat-form input:focus { border-color: var(--accent); }
+  .chat-send { width: 44px; border-radius: 12px; border: 0; background: var(--accent); color: #fff; cursor: pointer; display: grid; place-items: center; }
+  [data-theme="space"] .chat-send { color: #150d2e; }
+  .chat-send svg { width: 18px; height: 18px; }
+  .chat-foot { margin: 0; padding: 0 14px 10px; font-size: 11px; color: var(--muted); text-align: center; }
+  @media (max-width: 480px) { .chat { right: 8px; left: 8px; width: auto; top: 70px; bottom: 88px; height: auto; } }
+
   /* ================= Space mode ================= */
   :root[data-theme="space"] {
     color-scheme: dark;
@@ -1099,6 +1188,22 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/></svg>
 </button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="chat-fab" id="chatFab" aria-label="Ask my astronaut" data-i18n-aria="a.chat" aria-controls="chat" aria-expanded="false"><img src="images/avatar.jpg" alt=""><span class="chat-dot" aria-hidden="true"></span></button>
+<button class="chat-hint" id="chatHint" tabindex="-1"><span data-i18n="chat.hint">👋 Questions? Ask me!</span></button>
+<aside class="chat" id="chat" role="dialog" aria-labelledby="chatTitle" hidden>
+  <header class="chat-head">
+    <img src="images/avatar.jpg" alt="" class="chat-ava">
+    <div><b id="chatTitle" data-i18n="chat.title">Ask my astronaut</b><small id="chatStatus"></small></div>
+    <button class="chat-x" id="chatClose" aria-label="Close chat" data-i18n-aria="a.close">✕</button>
+  </header>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <div class="chat-chips" id="chatChips"></div>
+  <form class="chat-form" id="chatForm" autocomplete="off">
+    <input id="chatInput" type="text" maxlength="800" enterkeyhint="send" aria-label="Your message" data-i18n-aria="a.chatIn">
+    <button class="chat-send" aria-label="Send" data-i18n-aria="a.send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </form>
+  <p class="chat-foot" data-i18n="chat.foot">AI answers can be wrong. For a quote, contact me directly.</p>
+</aside>
 <button class="trophy-btn" id="trophyBtn" aria-label="Achievements" data-i18n-aria="a.trophy" aria-haspopup="dialog"><span aria-hidden="true">🏆</span><b id="trophyCount">0</b></button>
 <div class="ach-pop" id="achPop" role="status" aria-live="polite"></div>
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
@@ -1163,8 +1268,10 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 <!-- Project detail -->
 <div class="detail-backdrop" id="detailBackdrop"></div>
 <div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
-  <div class="hero-img">
+  <div class="hero-img" id="dStage">
     <img id="dImg" alt="">
+    <div class="dev-wrap" id="dDevices"></div>
+    <p class="dev-note" id="dNote" data-i18n="dev.note">Real screenshots · hover a screen to pause</p>
     <h3 id="detailTitle"></h3>
     <button class="close-btn" id="closeDetail" aria-label="Close project" data-i18n-aria="a.closeP">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -1205,6 +1312,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         "Serverless back-end with origin checks and a spam honeypot"
       ],
       url: "https://albsoldier.github.io/pillboxhillbeanmachine/",
+      shots: { desktop: "images/shot-coffee-desktop.jpg", mobile: "images/shot-coffee-mobile.jpg" },
       sq: {
         type: "Faqe porosish për një kafene",
         imageAlt: "Makinë espresso dhe ëmbëlsira në banakun e një kafeneje",
@@ -1233,6 +1341,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         "NOTAMs, study material uploads and real-time notifications"
       ],
       url: "https://saaa-flight.fun",
+      shots: { desktop: "images/shot-flight-desktop.jpg", mobile: "images/shot-flight-mobile.jpg" },
       sq: {
         type: "Aplikacion web për një shkollë fluturimi",
         imageAlt: "Një avion biznesi duke fluturuar në qiell blu",
@@ -1289,6 +1398,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     "ach.title": "Arritjet", "ach.reset": "Rifillo progresin", "a.trophy": "Arritjet", "a.close": "Mbyll",
     "c.save": "Ruaj kontaktin tim", "c.qr": "Shfaq kodin QR", "c.qrTitle": "Skano për të ruajtur kontaktin",
     "c.qrCap": "Drejtoje kamerën e telefonit te kodi. Do të të ofrojë të më shtosh te kontaktet.", "c.vcf": "Shkarko skedarin .vcf",
+    "dev.note": "Pamje reale · kalo mbi ekran për ta ndaluar",
+    "chat.hint": "👋 Pyetje? Më pyet mua!", "chat.title": "Pyet astronautin tim", "chat.foot": "Përgjigjet e AI mund të gabojnë. Për ofertë, më kontakto direkt.",
+    "a.chat": "Pyet astronautin tim", "a.chatIn": "Mesazhi yt", "a.send": "Dërgo",
     "x.title": "Festat", "x.mode": "Tema e Krishtlindjeve", "x.lights": "Dritat e Krishtlindjeve", "x.snow": "Borë",
     "x.badge": "🎄 Gëzuar Krishtlindjet dhe Vitin e Ri!", "a.xmas": "Cilësimet e Krishtlindjeve", "a.sleigh": "Sajja e Babadimrit: kliko për një dhuratë", "term.link": "terminali", "a.zerog": "Aktivizo zero gravitetin"
   };
@@ -1305,6 +1417,8 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       flagOn: "🦅 Happy Independence Day, Albania! 🇦🇱", flagOff: "Flag Day theme off",
       achNew: "Achievement unlocked", achAll: "🌟 You found everything! Golden astronaut unlocked", achReset: "Progress reset",
       saved: "📇 Contact saved! Check your downloads or contacts", of: "of",
+      chatHi: "Hi! 👋 I'm Jurgen's astronaut. Ask me about his work, what he can build for you, or how to get in touch.",
+      chatPh: "Ask me anything…", chatOnline: "Online · replies in seconds", chatChips: ["What can you build?", "How much does a website cost?", "Show me your projects", "How do I contact you?"],
       xmasOn: "🎄 Merry Christmas! Ho ho ho!", xmasOff: "Christmas mode off", lightsOn: "💡 Lights on", lightsOff: "Lights off", snowOn: "❄️ Let it snow!", snowOff: "Snow off",
       held: ["Hey, put me down! 😳", "Where are we going?", "Easy with the helmet!"],
       fly: ["Wheee! 🚀", "To infinity! ✨", "Zero-G baby! 🪐", "I believe I can fly!"],
@@ -1322,6 +1436,8 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       flagOn: "🦅 Gëzuar 28 Nëntorin! Rroftë Shqipëria! 🇦🇱", flagOff: "Tema e Ditës së Flamurit u fik",
       achNew: "Arritje e re", achAll: "🌟 I gjete të gjitha! Astronauti i artë u zhbllokua", achReset: "Progresi u rifillua",
       saved: "📇 Kontakti u ruajt! Shiko shkarkimet ose kontaktet", of: "nga",
+      chatHi: "Përshëndetje! 👋 Jam astronauti i Jurgenit. Më pyet për punën e tij, çfarë mund të ndërtojë për ty, ose si ta kontaktosh.",
+      chatPh: "Më pyet çfarëdo…", chatOnline: "Online · përgjigjet në pak sekonda", chatChips: ["Çfarë mund të ndërtosh?", "Sa kushton një faqe interneti?", "Më trego projektet", "Si të kontaktoj?"],
       xmasOn: "🎄 Gëzuar Krishtlindjet! Ho ho ho!", xmasOff: "Tema e Krishtlindjeve u fik", lightsOn: "💡 Dritat u ndezën", lightsOff: "Dritat u fikën", snowOn: "❄️ Le të bjerë borë!", snowOff: "Bora u fik",
       held: ["Hej, më lësho! 😳", "Ku po shkojmë?", "Kujdes me helmetën!"],
       fly: ["Uaaa! 🚀", "Drejt pafundësisë! ✨", "Zero gravitet! 🪐", "Po fluturoj!"],
@@ -1355,12 +1471,20 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
 
   // Build project cards
   const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  // laptop + phone mockup showing a project's real screenshots
+  function devicesHTML(p, live) {
+    if (!p.shots) return "";
+    return `<div class="devices${live ? " live" : ""}" aria-hidden="true"><div class="dev3d">
+      <div class="laptop"><div class="lid"><div class="screen"><img src="${esc(p.shots.desktop)}" alt="" loading="lazy" decoding="async"></div><i class="cam"></i></div><div class="base"><span></span></div></div>
+      <div class="phone"><div class="pscreen"><img src="${esc(p.shots.mobile)}" alt="" loading="lazy" decoding="async"></div><i class="notch"></i></div>
+    </div><div class="dev-shadow"></div></div>`;
+  }
   const cardHooks = [];
   function renderProjects() {
     const wasOpen = document.getElementById("workOverlay")?.classList.contains("open");
     $("projGrid").innerHTML = PROJECTS.map((p, i) => `
     <button class="proj${wasOpen ? " ready" : ""}" data-i="${i}">
-      <div class="shot"><img src="${esc(p.image)}" alt="${esc(P(p, "imageAlt") || p.title)}" loading="lazy"><span class="badge">${esc(P(p, "type"))}</span></div>
+      <div class="shot${p.shots ? " has-dev" : ""}"><img src="${esc(p.image)}" alt="${esc(P(p, "imageAlt") || p.title)}" loading="lazy">${devicesHTML(p, false)}<span class="badge">${esc(P(p, "type"))}</span></div>
       <div class="info">
         <h3>${esc(p.title)}</h3>
         <p>${esc(P(p, "summary"))}</p>
@@ -1462,13 +1586,36 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
   // ---------- Project detail (expands from the clicked card) ----------
   const detailEl = $("detail"), backdrop = $("detailBackdrop");
   let fromCard = null, detailIndex = -1;
+  // scroll long screenshots slowly inside the device screens
+  function rollShots() {
+    if (reduce) return;
+    $("dDevices").querySelectorAll(".screen img, .pscreen img").forEach(img => {
+      if (!img.complete || !img.naturalHeight) return;
+      const box = img.parentElement, dist = img.offsetHeight - box.clientHeight;
+      if (box.clientHeight && dist > 8) { img.style.setProperty("--dist", -dist + "px"); img.style.setProperty("--dur", Math.max(8, dist / 45) + "s"); img.classList.add("roll"); }
+    });
+  }
   function fillDetail(p) {
     $("dImg").src = p.image; $("dImg").alt = P(p, "imageAlt") || p.title;
+    $("dDevices").innerHTML = devicesHTML(p, true);
+    $("dStage").classList.toggle("has-dev", !!p.shots);
+    $("dDevices").querySelectorAll("img").forEach(img => { img.loading = "eager"; img.addEventListener("load", () => rollShots()); });
+    rollShots();
     $("detailTitle").textContent = p.title;
     $("dDesc").textContent = P(p, "summary");
     $("dType").textContent = P(p, "type");
     $("dFeatures").innerHTML = P(p, "features").map(f => `<li>${esc(f)}</li>`).join("");
   }
+  (function () {
+    const stage = $("dStage");
+    stage.addEventListener("pointermove", e => {
+      if (reduce) return;
+      const r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      const d = stage.querySelector(".dev3d"); if (!d) return;
+      d.style.setProperty("--ry", (-16 + x * 30) + "deg"); d.style.setProperty("--rx", (8 - y * 14) + "deg");
+    });
+    stage.addEventListener("pointerleave", () => { const d = stage.querySelector(".dev3d"); if (d) { d.style.removeProperty("--ry"); d.style.removeProperty("--rx"); } });
+  })();
   langHooks.push(() => {
     if (!detailEl.classList.contains("open")) return;
     fillDetail(PROJECTS[detailIndex]);
@@ -1482,7 +1629,10 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     $("dLink").href = p.url;
     detailEl.classList.add("open"); backdrop.classList.add("open");
     detailEl.scrollTop = 0;
-    animateFromCard(card, false).then(() => { detailEl.classList.add("shown"); $("closeDetail").focus({ preventScroll: true }); });
+    animateFromCard(card, false).then(() => {
+      detailEl.classList.add("shown"); $("closeDetail").focus({ preventScroll: true });
+      rollShots();
+    });
   }
   function closeDetail(instant) {
     detailEl.classList.remove("shown"); backdrop.classList.remove("open");
@@ -1856,7 +2006,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     { id: "patriot",   em: "🦅", en: ["Patriot", "Celebrated Albania's Flag Day"],              sq: ["Patriot", "Festove Ditën e Flamurit"],
       hint: ["Celebrate the 28th of November", "Festo 28 Nëntorin"] },
     { id: "networker", em: "📇", en: ["Networker", "Saved my contact"],                         sq: ["Në Kontakt", "Ruajte kontaktin tim"],
-      hint: ["Keep my details for later", "Ruaj të dhënat e mia për më vonë"] }
+      hint: ["Keep my details for later", "Ruaj të dhënat e mia për më vonë"] },
+    { id: "chat",      em: "🛰️", en: ["Mission Control", "Chatted with the astronaut"],          sq: ["Kontrolli i Misionit", "Bisedove me astronautin"],
+      hint: ["The astronaut in the corner wants to talk", "Astronauti në cep do të flasë"] }
   ];
   var achApi;
   function unlock(id) { if (achApi) achApi.unlock(id); }
@@ -2017,6 +2169,131 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       const c = e.target.closest(".proj"); if (!c) return;
       seen.add(c.dataset.i); if (seen.size >= PROJECTS.length) unlock("explorer");
     });
+  })();
+
+
+  // ================= Chat with the astronaut =================
+  // ====== EDIT ME: paste your Cloudflare Worker address here to switch on AI answers ======
+  // e.g. "https://albsoldier-chat.yourname.workers.dev". Left empty, the astronaut uses the built-in answers below.
+  const CHAT_API = "";
+  var chatApi;
+  (function () {
+    const chat = $("chat"), log = $("chatLog"), input = $("chatInput"), fab = $("chatFab"), hint = $("chatHint");
+    let history = []; try { history = JSON.parse(sessionStorage.getItem("chat") || "[]"); } catch {}
+    let busy = false;
+    const store = () => { try { sessionStorage.setItem("chat", JSON.stringify(history.slice(-30))); } catch {} };
+    const EMAIL = "jurgen.kapllani@hotmail.com", PHONE = "+355 69 528 9141", WA = "https://wa.me/355695289141";
+
+    // links for emails, phone numbers and web addresses in replies
+    function linkify(text) {
+      return esc(text)
+        .replace(/https?:\/\/[^\s<]+[^\s<.,;:!?)]/g, u => `<a href="${u}" target="_blank" rel="noopener">${u.replace(/^https?:\/\//, "")}</a>`)
+        .replace(/[\w.+-]+@[\w-]+\.[\w.]+[a-z]/gi, m => `<a href="mailto:${m}">${m}</a>`)
+        .replace(/\+355[\d ]{9,13}\d/g, m => `<a href="tel:${m.replace(/\s/g, "")}">${m}</a>`);
+    }
+    function bubble(role, text) {
+      const d = document.createElement("div"); d.className = "msg " + (role === "user" ? "me" : "bot"); d.innerHTML = linkify(text);
+      log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
+    }
+    function render() {
+      log.innerHTML = "";
+      bubble("assistant", t("chatHi"));
+      history.forEach(m => bubble(m.role, m.content));
+      $("chatChips").innerHTML = t("chatChips").map(c => `<button type="button">${esc(c)}</button>`).join("");
+      $("chatChips").querySelectorAll("button").forEach(b => b.addEventListener("click", () => send(b.textContent)));
+      input.placeholder = t("chatPh"); $("chatStatus").textContent = t("chatOnline");
+    }
+
+    // ---------- built-in answers (used until the AI worker is connected, or if it is unreachable) ----------
+    const has = (q, words) => words.some(w => q.includes(w));
+    function localAnswer(text) {
+      const q = " " + text.toLowerCase() + " ", sq = L() === "sq";
+      const A = (en, al) => sq ? al : en;
+      if (has(q, ["price", "cost", "how much", "quote", "budget", "pay", "çmim", "cmim", "kushton", "kosto", "ofert", "pagesë", "sa bën", "sa ben"]))
+        return A(`Every project is different, so Jurgen gives you a free quote once he knows what you need. Send him a short description on WhatsApp (${PHONE}) or email ${EMAIL} 🚀`,
+                 `Çdo projekt është i ndryshëm, ndaj Jurgeni të jep një ofertë falas sapo të dijë çfarë të duhet. Dërgoji një përshkrim të shkurtër në WhatsApp (${PHONE}) ose email ${EMAIL} 🚀`);
+      if (has(q, ["how long", "deadline", "when can", "sa kohë", "sa kohe", "afat", "kur mund"]))
+        return A("It depends on the size of the project. Jurgen will give you a timeline together with your free quote. Want to tell him about it? WhatsApp " + PHONE,
+                 "Varet nga madhësia e projektit. Jurgeni të jep afatin së bashku me ofertën falas. Dëshiron t'i tregosh? WhatsApp " + PHONE);
+      if (has(q, ["contact", "email", "e-mail", "phone", "whatsapp", "call", "reach", "number", "kontakt", "telefon", "numr", "numër", "shkruaj", "mesazh"]))
+        return A(`You can reach Jurgen on WhatsApp or phone at ${PHONE} (${WA}) or by email at ${EMAIL}. There's also a "Save my contact" button at the bottom of the page 📇`,
+                 `Mund ta kontaktosh Jurgenin në WhatsApp ose telefon në ${PHONE} (${WA}) ose me email në ${EMAIL}. Poshtë në faqe ka edhe butonin "Ruaj kontaktin tim" 📇`);
+      if (has(q, ["coffee", "café", "cafe", "bean", "kafe", "kafene"]))
+        return A("Pillbox Hill Bean Machine is a coffee shop ordering website: menu, cart, drink customization, pickup or delivery, a hiring form and reviews, with orders sent straight to staff on Discord ☕ Take a look: https://albsoldier.github.io/pillboxhillbeanmachine/",
+                 "Pillbox Hill Bean Machine është faqe porosish për një kafene: menu, shportë, personalizim pijesh, marrje në vend ose dërgesë, formular punësimi dhe vlerësime, me porositë që i shkojnë direkt stafit në Discord ☕ Shikoje: https://albsoldier.github.io/pillboxhillbeanmachine/");
+      if (has(q, ["flight", "aviation", "pilot", "plane", "aircraft", "saaa", "fluturim", "avion", "aviacion"]))
+        return A("The SAAA Flight School Tracker is a web app where students, instructors and admins log flights, track progress, earn certificates and book aircraft, with live updates ✈️ https://saaa-flight.fun",
+                 "SAAA Flight School Tracker është një aplikacion web ku studentët, instruktorët dhe administratorët regjistrojnë fluturime, ndjekin progresin, marrin certifikata dhe rezervojnë avionë, me përditësime live ✈️ https://saaa-flight.fun");
+      if (has(q, ["project", "portfolio", "work", "example", "show me", "projekt", "punët", "punet", "shembull", "trego"]))
+        return A("Jurgen has built two big projects so far: a coffee shop ordering website ☕ and a flight school tracker web app ✈️ Open the \"My Work\" folder on this page to see them in action!",
+                 "Jurgeni ka ndërtuar deri tani dy projekte të mëdha: një faqe porosish për një kafene ☕ dhe një aplikacion për një shkollë fluturimi ✈️ Hap dosjen \"Punët e mia\" në këtë faqe për t'i parë!");
+      if (has(q, ["build", "make", "service", "offer", "website", "web app", "site", "do you do", "ndërto", "ndertoj", "ndërtosh", "shërbim", "sherbim", "faqe", "aplikacion", "bën", "ben"]))
+        return A("Jurgen builds business websites, online ordering systems (menus, carts, order alerts), custom web apps with logins and live updates, and he can fix or improve a site you already have 🛠️ What do you have in mind?",
+                 "Jurgeni ndërton faqe për biznese, sisteme porosish online (menu, shportë, njoftime porosish), aplikacione web me llogari dhe përditësime live, dhe mund të rregullojë ose përmirësojë faqen që ke 🛠️ Çfarë ke në mendje?");
+      if (has(q, ["skill", "tech", "stack", "language", "javascript", "node", "react", "html", "teknologji", "aftësi", "aftesi", "gjuhë programimi"]))
+        return A("He works with HTML, CSS and JavaScript, Node.js and Express, Cloudflare Workers, SQLite (Turso), Socket.IO for real-time features and Discord integrations, plus AI tools to move fast ⚡",
+                 "Punon me HTML, CSS dhe JavaScript, Node.js dhe Express, Cloudflare Workers, SQLite (Turso), Socket.IO për veçori në kohë reale dhe integrime me Discord, plus mjete AI për të punuar shpejt ⚡");
+      if (has(q, ["albanian", "english", "shqip", "anglisht", "language", "gjuh"]))
+        return A("Yes! Sites can be in English, Albanian or both, just like this one 🇦🇱🇬🇧", "Po! Faqet mund të jenë në shqip, anglisht ose të dyja, si kjo këtu 🇦🇱🇬🇧");
+      if (has(q, ["where", "albania", "tirana", "location", "ku je", "ku jeni", "shqipëri", "shqiperi", "tiran"]))
+        return A("Jurgen is based in Albania 🇦🇱 and works with clients online, wherever they are.", "Jurgeni është në Shqipëri 🇦🇱 dhe punon me klientë online, kudo që të jenë.");
+      if (has(q, ["secret", "easter", "hidden", "game", "sekret", "fshehur", "lojë", "loje"]))
+        return A("Psst… try pressing the ~ key, typing \"gravity\", or clicking the coffee cup 3 times 🤫", "Psst… provo tastin ~, shkruaj \"graviteti\", ose kliko filxhanin e kafesë 3 herë 🤫");
+      if (has(q, ["thank", "thx", "faleminderit", "flm", "rrofsh"]))
+        return A("You're welcome! 🚀 Anything else?", "S'ka përse! 🚀 Diçka tjetër?");
+      if (has(q, ["who are you", "who is", "about you", "about jurgen", "kush je", "kush është", "kush eshte", "rreth"]))
+        return A("I'm the astronaut mascot of this site 🧑‍🚀 Jurgen is a web developer from Albania who builds fast, friendly websites and web apps for real businesses.",
+                 "Jam maskota astronaut e kësaj faqeje 🧑‍🚀 Jurgeni është zhvillues web nga Shqipëria që ndërton faqe dhe aplikacione web të shpejta e miqësore për biznese të vërteta.");
+      if (has(q, [" hi ", "hello", "hey", "good morning", "good evening", "përshëndetje", "pershendetje", "tung", "çkemi", "ckemi", "mirëdita", "miredita", "hej"]))
+        return A("Hi there! 👋 What would you like to know?", "Përshëndetje! 👋 Çfarë do të doje të dish?");
+      return A(`Hmm, I'm not sure about that one 🛸 Jurgen can answer it himself: WhatsApp ${PHONE} or email ${EMAIL}.`,
+               `Hmm, për këtë nuk jam i sigurt 🛸 Jurgeni mund të të përgjigjet vetë: WhatsApp ${PHONE} ose email ${EMAIL}.`);
+    }
+
+    async function ask(text) {
+      if (CHAT_API) {
+        try {
+          const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 25000);
+          const res = await fetch(CHAT_API, { method: "POST", headers: { "Content-Type": "application/json" }, signal: ctrl.signal,
+            body: JSON.stringify({ messages: history.slice(-12) }) });
+          clearTimeout(timer);
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.reply) return data.reply;
+        } catch {}
+      }
+      await new Promise(r => setTimeout(r, 500 + Math.random() * 500));   // feels like typing
+      return localAnswer(text);
+    }
+
+    async function send(text) {
+      text = (text || "").trim().slice(0, 800);
+      if (!text || busy) return;
+      busy = true; input.value = "";
+      history.push({ role: "user", content: text }); store(); bubble("user", text);
+      unlock("chat");
+      const typing = document.createElement("div"); typing.className = "msg bot typing"; typing.innerHTML = "<i></i><i></i><i></i>";
+      log.appendChild(typing); log.scrollTop = log.scrollHeight;
+      const reply = await ask(text);
+      typing.remove();
+      history.push({ role: "assistant", content: reply }); store(); bubble("assistant", reply);
+      busy = false; input.focus({ preventScroll: true });
+    }
+
+    function open(v, prefill) {
+      chat.hidden = !v; fab.setAttribute("aria-expanded", v); hint.classList.remove("show");
+      try { sessionStorage.setItem("chatHint", "1"); } catch {}
+      if (v) { render(); setTimeout(() => input.focus({ preventScroll: true }), 50); if (prefill) send(prefill); }
+    }
+    fab.addEventListener("click", () => open(chat.hidden));
+    hint.addEventListener("click", () => open(true));
+    $("chatClose").addEventListener("click", () => { open(false); fab.focus(); });
+    $("chatForm").addEventListener("submit", e => { e.preventDefault(); send(input.value); });
+    addEventListener("keydown", e => { if (e.key === "Escape" && !chat.hidden && !modalOpen) { open(false); fab.focus(); } });
+    langHooks.push(() => { if (!chat.hidden) render(); });
+    // a friendly nudge once per visit
+    let seen = false; try { seen = sessionStorage.getItem("chatHint") === "1"; } catch {}
+    if (!seen) setTimeout(() => { if (chat.hidden && !zeroG) { hint.classList.add("show"); setTimeout(() => hint.classList.remove("show"), 7000); } }, 6000);
+    chatApi = { open };
   })();
 
   // ================= Comet mouse trail =================
@@ -2409,7 +2686,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       en: {
         welcome: "Welcome to <span class='acc'>albsoldier.dev</span> 🚀  Type <b class='ok'>help</b> to see what you can do.",
         tip: "Tip: ↑ ↓ for history, Tab to autocomplete, Esc to close.",
-        help: { help: "show this list", about: "who I am", projects: "list my projects", "open <n>": "open a project", skills: "what I work with",
+        help: { help: "show this list", about: "who I am", projects: "list my projects", "open <n>": "open a project", "ask <q>": "ask the astronaut", skills: "what I work with",
           contact: "how to reach me", theme: "light, dark or space", lang: "en or sq", gravity: "turn off gravity", trophies: "your achievements", flag: "Flag Day (28 Nov)", comet: "mouse comet on/off", xmas: "Christmas mode on/off", snow: "let it snow", coffee: "take a break",
           rocket: "launch a rocket", ls: "list files", "cat <file>": "read a file", date: "time in Tirana", whoami: "about you", clear: "clear the screen", exit: "close the terminal" },
         about: "Hi! I'm <span class='acc'>Albsoldier</span>, a web developer from Albania 🇦🇱\nI build fast, friendly websites with clean front-ends,\nsmooth ordering flows and back-ends that just work.",
@@ -2428,7 +2705,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       sq: {
         welcome: "Mirë se erdhe në <span class='acc'>albsoldier.dev</span> 🚀  Shkruaj <b class='ok'>help</b> për të parë çfarë mund të bësh.",
         tip: "Këshillë: ↑ ↓ për historikun, Tab për plotësim, Esc për ta mbyllur.",
-        help: { help: "shfaq këtë listë", about: "kush jam unë", projects: "lista e projekteve", "open <n>": "hap një projekt", skills: "me çfarë punoj",
+        help: { help: "shfaq këtë listë", about: "kush jam unë", projects: "lista e projekteve", "open <n>": "hap një projekt", "ask <q>": "pyet astronautin", skills: "me çfarë punoj",
           contact: "si të më kontaktosh", theme: "light, dark ose space", lang: "en ose sq", gravity: "fik gravitetin", trophies: "arritjet e tua", flag: "Dita e Flamurit", comet: "ndiz/fik kometën e miut", xmas: "ndiz/fik Krishtlindjet", snow: "le të bjerë borë", coffee: "bëj një pushim",
           rocket: "lësho një raketë", ls: "listo skedarët", "cat <file>": "lexo një skedar", date: "ora në Tiranë", whoami: "rreth teje", clear: "pastro ekranin", exit: "mbyll terminalin" },
         about: "Përshëndetje! Jam <span class='acc'>Albsoldier</span>, zhvillues web nga Shqipëria 🇦🇱\nNdërtoj faqe interneti të shpejta dhe miqësore, me ndërfaqe të pastra,\nporosi të thjeshta online dhe back-end që thjesht funksionon.",
@@ -2464,7 +2741,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
     }
 
-    const COMMANDS = ["trophies", "achievements", "flag", "comet", "xmas", "snow", "help", "about", "projects", "open", "skills", "contact", "theme", "lang", "gravity", "coffee", "rocket", "ls", "cat", "date", "whoami", "echo", "clear", "exit", "sudo", "hire"];
+    const COMMANDS = ["ask", "trophies", "achievements", "flag", "comet", "xmas", "snow", "help", "about", "projects", "open", "skills", "contact", "theme", "lang", "gravity", "coffee", "rocket", "ls", "cat", "date", "whoami", "echo", "clear", "exit", "sudo", "hire"];
 
     async function run(raw) {
       const cmdline = raw.trim();
@@ -2540,6 +2817,9 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
         case "date":
           line(`${tt("tirana")} <span class="acc">${new Date().toLocaleString(L() === "sq" ? "sq-AL" : "en-GB", { timeZone: "Europe/Tirane", weekday: "long", hour: "2-digit", minute: "2-digit", day: "numeric", month: "long" })}</span>`); break;
         case "whoami": line(tt("whoami")); break;
+        case "ask": case "pyet":
+          line(L() === "sq" ? "🛰️ Po lidhem me astronautin…" : "🛰️ Connecting you to the astronaut…", "ok");
+          await sleep(400); close(); chatApi.open(true, arg || ""); break;
         case "trophies": case "achievements": case "arritjet": {
           const have = achApi.list(), sq = L() === "sq";
           line(`🏆 <span class="acc">${have.length}/${ACH.length}</span>`);
