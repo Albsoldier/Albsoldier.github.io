@@ -1230,6 +1230,37 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
      Add a new object to this list to add a project. Put its picture in the images folder. */
   const PROJECTS = [
     {
+      title: "Last Light",
+      type: "3D survival game for the browser",
+      image: "images/lastlight.jpg",
+      imageAlt: "A walled camp at night with torch posts, a campfire, red barracks and soldiers in red tunics",
+      summary: "A 3D survival game on one huge island that every player shares. Gather, survive the night, build a fort and raise an army of up to 100, while finding the graves and notes other players left behind.",
+      tags: ["Godot 4", "GDScript", "Cloudflare Workers", "SQLite (Turso)", "Cloudflare Pages", "GitHub Actions"],
+      features: [
+        "A kilometre-wide island, generated in chunks as you explore",
+        "Day and night cycle, wolves, hunger, warmth and sanity",
+        "Base building: walls, gates, torch posts, chests, tents and barracks",
+        "An army of up to 100 animated soldiers that follow you or guard your base",
+        "Accounts and cloud saves, so progress carries over to any browser",
+        "Shared traces: graves, notes and supply stashes from other players"
+      ],
+      url: "https://last-light-6uv.pages.dev",
+      shots: { desktop: "images/shot-lastlight-desktop.jpg" },
+      sq: {
+        type: "Lojë mbijetese 3D për shfletuesin",
+        imageAlt: "Një kamp i rrethuar me mure natën, me pishtarë, një zjarr kampi, kazerma të kuqe dhe ushtarë me rroba të kuqe",
+        summary: "Një lojë mbijetese 3D në një ishull të madh që e ndajnë të gjithë lojtarët. Mblidh lëndë, mbijeto natën, ndërto një kështjellë dhe krijo një ushtri deri në 100 ushtarë, ndërsa gjen varret dhe shënimet që kanë lënë lojtarët e tjerë.",
+        features: [
+          "Ishull një kilometër i gjerë, që krijohet pjesë-pjesë ndërsa e eksploron",
+          "Cikël dite e nate, ujqër, uri, ngrohtësi dhe qetësi mendore",
+          "Ndërtim baze: mure, porta, shtylla pishtarësh, arka, tenda dhe kazerma",
+          "Ushtri deri në 100 ushtarë të animuar që të ndjekin ose ruajnë bazën",
+          "Llogari dhe ruajtje në cloud, që progresi të vazhdojë në çdo shfletues",
+          "Gjurmë të përbashkëta: varre, shënime dhe rezerva nga lojtarët e tjerë"
+        ]
+      }
+    },
+    {
       title: "Pillbox Hill Bean Machine",
       type: "Coffee shop ordering website",
       image: "images/coffee.jpg",
@@ -1403,7 +1434,7 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
     if (!p.shots) return "";
     return `<div class="devices${live ? " live" : ""}" aria-hidden="true"><div class="dev3d">
       <div class="laptop"><div class="lid"><div class="screen"><img src="${esc(p.shots.desktop)}" alt="" loading="lazy" decoding="async"></div><i class="cam"></i></div><div class="base"><span></span></div></div>
-      <div class="phone"><div class="pscreen"><img src="${esc(p.shots.mobile)}" alt="" loading="lazy" decoding="async"></div><i class="notch"></i></div>
+      ${p.shots.mobile ? `<div class="phone"><div class="pscreen"><img src="${esc(p.shots.mobile)}" alt="" loading="lazy" decoding="async"></div><i class="notch"></i></div>` : ""}
     </div><div class="dev-shadow"></div></div>`;
   }
   const cardHooks = [];
