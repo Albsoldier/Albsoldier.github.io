@@ -1230,19 +1230,22 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
      Add a new object to this list to add a project. Put its picture in the images folder. */
   const PROJECTS = [
     {
-      title: "Last Light",
+      title: "Islander",
       type: "3D strategy survival game for the browser",
       image: "images/lastlight.jpg",
       imageAlt: "A legion of soldiers with red shields and crested helmets outside a walled fort at sunset",
-      summary: "A 3D survival and strategy game on one huge island shared by every player. Gather, build a walled fort, raise a legion of up to 100 soldiers and explore ruins, shipwrecks and lighthouses, while finding the graves and notes other players left behind.",
+      summary: "A 3D survival and strategy game on one huge island shared by every player. Gather, build a walled fort, raise a legion of up to 100 soldiers, sail to treasure islets and live through the seasons, while finding the graves and notes other players left behind.",
       tags: ["Godot 4", "GDScript", "GLSL shaders", "Cloudflare Workers", "SQLite (Turso)", "GitHub Actions"],
       features: [
         "A kilometre-wide island with natural terrain, water and swaying forests, all generated in code",
-        "Strategy-game camera you can zoom and rotate, with a moving sun and day-night cycle",
+        "Strategy-game camera you can zoom and rotate, or switch to first person at any time",
+        "Seasons: summer meadows, autumn leaves and snowy winters with frozen lakes",
         "Base building: walls, gates, torch posts, barracks and crafting stations, with a full refund if you take a mistake down right away",
         "Inventory screen and a hotbar to equip weapons and tools, each changing how you fight and gather",
-        "An army of up to 100 legionaries that follow you or guard your fort",
-        "26 places to discover: lighthouses, shipwrecks, caves, ruins and shrines",
+        "A legion of up to 100 named soldiers (legionaries, archers, cavalry and centurions) who rise through the ranks",
+        "Command it like a strategy game: drag to select, click to send, and line, shield wall or wedge formations",
+        "Boats: build a dock, then a raft or a galley to sail to islets with treasure and gold",
+        "31 places to discover: lighthouses, shipwrecks, caves, ruins, shrines and treasure hoards",
         "Minimap, a parchment island map, and sound and music synthesized in code",
         "Accounts and cloud saves, so progress carries over to any browser"
       ],
@@ -1251,14 +1254,17 @@ var lg="en";try{lg=localStorage.getItem("lang")||((navigator.languages||[navigat
       sq: {
         type: "Lojë 3D strategjie dhe mbijetese për shfletuesin",
         imageAlt: "Një legjion ushtarësh me mburoja të kuqe dhe helmeta me kreshtë jashtë një kështjelle me mure në perëndim të diellit",
-        summary: "Një lojë 3D mbijetese dhe strategjie në një ishull të madh që e ndajnë të gjithë lojtarët. Mblidh lëndë, ndërto një kështjellë me mure, krijo një legjion deri në 100 ushtarë dhe eksploro rrënoja, anije të mbytura dhe fanarë, ndërsa gjen varret dhe shënimet që kanë lënë lojtarët e tjerë.",
+        summary: "Një lojë 3D mbijetese dhe strategjie në një ishull të madh që e ndajnë të gjithë lojtarët. Mblidh lëndë, ndërto një kështjellë me mure, krijo një legjion deri në 100 ushtarë, lundro drejt ishujve me thesare dhe kalo nëpër stinët e vitit, ndërsa gjen varret dhe shënimet që kanë lënë lojtarët e tjerë.",
         features: [
           "Ishull një kilometër i gjerë me terren natyral, ujë dhe pyje që lëkunden, të krijuara me kod",
-          "Kamerë si në lojërat e strategjisë që zmadhohet dhe rrotullohet, me diell që lëviz dhe cikël dite e nate",
+          "Kamerë si në lojërat e strategjisë që zmadhohet dhe rrotullohet, ose pamje në vetën e parë në çdo kohë",
+          "Stinë: livadhe vere, gjethe vjeshte dhe dimra me borë ku liqenet ngrijnë",
           "Ndërtim baze: mure, porta, shtylla pishtarësh, kazerma dhe stacione punimi, me rimbursim të plotë nëse e heq menjëherë një gabim",
           "Inventar dhe shirit veglash për të pajisur armë dhe vegla, secila ndryshon si lufton dhe si mbledh",
-          "Ushtri deri në 100 legjionarë që të ndjekin ose ruajnë kështjellën",
-          "26 vende për t'u zbuluar: fanarë, anije të mbytura, shpella, rrënoja dhe faltore",
+          "Legjion deri në 100 ushtarë me emra (legjionarë, harkëtarë, kalorës dhe centurionë) që ngrihen në grada",
+          "Komando si në një lojë strategjie: zgjidh me tërheqje, dërgo me klikim, dhe formacione në rresht, mur mburojash ose pykë",
+          "Anije: ndërto një skelë, pastaj një trap ose një galerë për të lundruar drejt ishujve me thesar dhe ar",
+          "31 vende për t'u zbuluar: fanarë, anije të mbytura, shpella, rrënoja, faltore dhe thesare",
           "Hartë e vogël, hartë ishulli në pergamenë, si dhe tinguj e muzikë të krijuara me kod",
           "Llogari dhe ruajtje në cloud, që progresi të vazhdojë në çdo shfletues"
         ]
